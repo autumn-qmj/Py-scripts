@@ -16,3 +16,11 @@ if(len(port_list) < 0):
 else:
 	port_name = [list(x)[0] for x in port_list]
 	print(port_name)
+
+
+class serial_port(serial):
+	"""docstring for serial_port"""
+	def __init__(self, arg):
+		super(serial_port, self).__init__()
+		self.arg = arg
+		
