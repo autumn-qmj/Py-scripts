@@ -1,0 +1,2 @@
+1.sdmmc_list.py is used to list the boards which have the sdcard/mmccard relate example.
+2.sdmmc_log.py is used to update the sdcard/mmccard example readme file.
