@@ -24,10 +24,11 @@ def serialport_list():
 		print('Total com ports %d:\n'%len(port))
 	return port	
 
-def serialport_status(port):
-	if
+def serialport_Log():
+	if s.recvData:
+		print s.recvData
+		s.recvData = None
 
-		
 class serial_port(object):
 	"""docstring for serial_port"""
 	def __init__(self, port=None, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE,
@@ -76,7 +77,8 @@ class serial_port(object):
 			try:
 				number = self.device.inWaiting()
 				if number:
-					self.recvData = self.device.read(number)
+					self.recvData = self.device.readline(number)
+					print self.recvData
 			except IOError as e:
 				logging.error(e)
 
@@ -96,7 +98,7 @@ if __name__ == '__main__':
 		s=serial_port(port)
 		s.serialport_open()
 		serialRead = threading.Thread(target = s.serialport_read)
-		serialPortExist = threading.Thread(target = serialport_status, arg=(port))
+		serialPortLog = threading.Thread(target = serialport_Log)
 		serialRead.setDaemon(True)
 		serialRead.start()
 		serialRead.join()
