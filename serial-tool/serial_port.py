@@ -77,7 +77,7 @@ class serial_port(object):
 			try:
 				number = self.device.inWaiting()
 				if number:
-					self.recvData = self.device.readline(number)
+					self.recvData = self.device.read(number)
 					print self.recvData
 			except IOError as e:
 				logging.error(e)
