@@ -11,6 +11,10 @@ import serial.tools.list_ports
 import binascii
 import logging
 
+def serialport_Log():
+	if s.recvData:
+		print s.recvData
+		s.recvData = None
 
 def serialport_list():
 
@@ -24,12 +28,7 @@ def serialport_list():
 		print('Total com ports %d:\n'%len(port))
 	return port	
 
-def serialport_Log():
-	if s.recvData:
-		print s.recvData
-		s.recvData = None
-
-class serial_port(object):
+class Serial_port(object):
 	"""docstring for serial_port"""
 	def __init__(self, port=None, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE,
 		timeout=None, xonxoff=False, rtscts=False, write_timeout=None, dsrdtr=False, inter_byte_timeout=None):
@@ -95,7 +94,7 @@ if __name__ == '__main__':
 	if port_list != None:
 		print('select port form list:\n%s'%port_list)
 		port = raw_input()
-		s=serial_port(port)
+		s=Serial_port(port)
 		s.serialport_open()
 		serialRead = threading.Thread(target = s.serialport_read)
 		serialPortLog = threading.Thread(target = serialport_Log)
