@@ -9,15 +9,16 @@ __author__ = 'cc'
 from Tkinter import *
 from ttk import *
 import ScrolledText as st
+import serial
 
 
 ConfigurationLabel = ['baudrate', 'bytesize', 'parity', 'stopbits', 'xonxoff', 'rts', 'dtr']
 BaudrateList = [256000, 128000, 115200, 57600, 56000, 38400, 19200, 14400, 9600, 4800, 2400, 1200, 600, 300]
 BytesizeList = [5, 6, 7, 8]
-ParityList = ['None', 'Odd', 'Even', 'Mark', 'Space']
-StopbitsList = ['1', '1.5', '2']
-FlowCtrlList= ['None', 'Software']
-DtrrtsList = ['Disable', 'Enable']
+ParityList = {'None' : serial.PARITY_NONE, 'Odd' : serial.PARITY_ODD, 'Even' : serial.PARITY_EVEN, 'Mark': serial.PARITY_MARK, 'Space':serial.PARITY_SPACE}
+StopbitsList = {'1':serial.STOPBITS_ONE, '1.5':serial.STOPBITS_ONE_POINT_FIVE, '2':serial.STOPBITS_TWO}
+FlowCtrlList= {'None':serial.XON, 'Software':serial.XOFF}
+DtrrtsList = ['False', 'True']
 
 class Serial_ui(Frame):
 	def __init__(self, parent):
@@ -46,7 +47,7 @@ class Serial_ui(Frame):
 		self.create_status_frame()
 		
 	def create_recv_frame(self):
-		self.recvText = st.ScrolledText(self.recvframe, width = 100, height = 33).grid(column=1, row=1)
+		self.recvText = st.ScrolledText(self.recvframe, width = 100).grid(column=1, row=1)
 
 	def create_configuration_frame(self):
 		#self.confTopFrame = LabelFrame(self.confFrame)
@@ -90,17 +91,17 @@ class Serial_ui(Frame):
 		self.bytesize.grid(column=1, row=3)
 		self.bytesize.current(3)
 		#parity combobox
-		self.parity = Combobox(self.confBotFrame, values = ParityList, state = 'readonly', width = 10)
+		self.parity = Combobox(self.confBotFrame, values = ParityList.keys(), state = 'readonly', width = 10)
 		self.parity.grid(column=1, row=4)
-		self.parity.current(0)
+		self.parity.current(1)
 		#stopbits combobox
-		self.stopbits = Combobox(self.confBotFrame, values = StopbitsList, state = 'readonly', width = 10)
+		self.stopbits = Combobox(self.confBotFrame, values = StopbitsList.keys(), state = 'readonly', width = 10)
 		self.stopbits.grid(column=1, row=5)
 		self.stopbits.current(0)
 		#flow control combobox
-		self.stopbits = Combobox(self.confBotFrame, values = FlowCtrlList, state = 'readonly', width = 10)
-		self.stopbits.grid(column=1, row=6)
-		self.stopbits.current(0)
+		self.flowctrl = Combobox(self.confBotFrame, values = FlowCtrlList.keys(), state = 'readonly', width = 10)
+		self.flowctrl.grid(column=1, row=6)
+		self.flowctrl.current(0)
 		#rts checkbutton
 		self.rts = Combobox(self.confBotFrame, values = DtrrtsList, state = 'readonly', width = 10)
 		self.rts.grid(column=1, row=7)

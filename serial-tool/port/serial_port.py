@@ -44,6 +44,15 @@ class Serial_port(object):
 		self.dsrdtr = dsrdtr
 		self.inter_byte_timeout = inter_byte_timeout
 		self.device = None
+		print self.port
+		print self.baudrate
+		print self.bytesize
+		print self.parity
+		print self.stopbits
+		print self.xonxoff
+		print self.rtscts
+		print self.dsrdtr
+
 
 	def serialport_open(self):
 		self.device = serial.Serial()

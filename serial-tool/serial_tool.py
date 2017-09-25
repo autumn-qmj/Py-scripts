@@ -30,7 +30,13 @@ class Serial_tool(Serial_ui):
 			return d	
 
 	def click_open(self):
-		pass
+		if self.listbox.curselection() == ():
+			pass
+		else:
+			self.serialDev = Serial_port(self.listbox.get(self.listbox.curselection()),
+							self.baudrate.get(), self.bytesize.get(),
+							self.parity.get(), self.stopbits.get(), xonxoff = self.flowctrl.get(),
+							rtscts = self.rts.get(), dsrdtr = self.dtr.get())
 
 	def click_refresh(self):
 		self.update_port_list_ui()
