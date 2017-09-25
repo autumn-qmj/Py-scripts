@@ -71,9 +71,11 @@ class Serial_port(object):
 			self.device.open()
 			if self.device.isOpen():
 				self.alive = True
+				return True
 		except IOError as e:
 			self.alive = False
 			logging.error(e)
+			return False
 		
 	def serialport_close(self):
 		if self.device.isOpen():

@@ -14,11 +14,11 @@ import serial
 
 ConfigurationLabel = ['baudrate', 'bytesize', 'parity', 'stopbits', 'xonxoff', 'rts', 'dtr']
 BaudrateList = [256000, 128000, 115200, 57600, 56000, 38400, 19200, 14400, 9600, 4800, 2400, 1200, 600, 300]
-BytesizeList = [5, 6, 7, 8]
-ParityList = {'None' : serial.PARITY_NONE, 'Odd' : serial.PARITY_ODD, 'Even' : serial.PARITY_EVEN, 'Mark': serial.PARITY_MARK, 'Space':serial.PARITY_SPACE}
-StopbitsList = {'1':serial.STOPBITS_ONE, '1.5':serial.STOPBITS_ONE_POINT_FIVE, '2':serial.STOPBITS_TWO}
-FlowCtrlList= {'None':serial.XON, 'Software':serial.XOFF}
-DtrrtsList = ['False', 'True']
+BytesizeList = {'5':serial.FIVEBITS, '6':serial.SIXBITS, '7':serial.SEVENBITS, '8':serial.EIGHTBITS}
+ParityList = {'None' : serial.PARITY_NONE, 'Odd' : serial.PARITY_ODD, 'Even' : serial.PARITY_EVEN, 'Mark': serial.PARITY_MARK, 'Space': serial.PARITY_SPACE}
+StopbitsList = {'1' : serial.STOPBITS_ONE, '1.5' : serial.STOPBITS_ONE_POINT_FIVE, '2' : serial.STOPBITS_TWO}
+FlowCtrlList= {'Disable' : False, 'Software' : False}
+DtrrtsList = {'Disable' : False, 'Enable' : True}
 
 class Serial_ui(Frame):
 	def __init__(self, parent):
@@ -87,9 +87,9 @@ class Serial_ui(Frame):
 		self.baudrate.grid(column=1, row=2, pady = 5)
 		self.baudrate.current(2)
 		#bytesize combobox
-		self.bytesize = Combobox(self.confBotFrame, values = BytesizeList, state = 'readonly', width = 10)
+		self.bytesize = Combobox(self.confBotFrame, values = BytesizeList.keys(), state = 'readonly', width = 10)
 		self.bytesize.grid(column=1, row=3)
-		self.bytesize.current(3)
+		self.bytesize.current(0)
 		#parity combobox
 		self.parity = Combobox(self.confBotFrame, values = ParityList.keys(), state = 'readonly', width = 10)
 		self.parity.grid(column=1, row=4)
@@ -103,11 +103,11 @@ class Serial_ui(Frame):
 		self.flowctrl.grid(column=1, row=6)
 		self.flowctrl.current(0)
 		#rts checkbutton
-		self.rts = Combobox(self.confBotFrame, values = DtrrtsList, state = 'readonly', width = 10)
+		self.rts = Combobox(self.confBotFrame, values = DtrrtsList.keys(), state = 'readonly', width = 10)
 		self.rts.grid(column=1, row=7)
 		self.rts.current(0)
 		#dtr checkbutton
-		self.dtr = Combobox(self.confBotFrame, values = DtrrtsList, state = 'readonly', width = 10)
+		self.dtr = Combobox(self.confBotFrame, values = DtrrtsList.keys(), state = 'readonly', width = 10)
 		self.dtr.grid(column=1, row=8)
 		self.dtr.current(0)
 		
@@ -116,10 +116,7 @@ class Serial_ui(Frame):
 		self.statusBar = Label(self.statusframe, width = 60, textvariable = self.statusText, background = 'WhiteSmoke').grid(column=0, row=0)
 
 	def click_open(self):
-		if self.openText.get() == 'open':
-			self.openText.set('close')
-		else:
-			self.openText.set('open')
+		pass
 
 	def click_send(self):
 		pass

@@ -30,13 +30,26 @@ class Serial_tool(Serial_ui):
 			return d	
 
 	def click_open(self):
-		if self.listbox.curselection() == ():
-			pass
+		if self.openText.get() == 'open':
+			if self.listbox.curselection() == ():
+				pass
+			else:
+				port = self.listbox.get(self.listbox.curselection())
+				print self.flowctrl.get()
+				print FlowCtrlList[self.flowctrl.get()]
+				self.serialDev = Serial_port(port, self.baudrate.get(), BytesizeList[self.bytesize.get()],
+								ParityList[self.parity.get()], StopbitsList[self.stopbits.get()], xonxoff = FlowCtrlList[self.flowctrl.get()],
+								rtscts = DtrrtsList[self.rts.get()], dsrdtr = DtrrtsList[self.dtr.get()])
+				if self.serialDev.serialport_open():
+					self.update_status_text(port + ' open successfully')
+					self.openText.set('close')
+				else:
+					self.update_status_text(port + ' open Failed, Please check the connection')
 		else:
-			self.serialDev = Serial_port(self.listbox.get(self.listbox.curselection()),
-							self.baudrate.get(), self.bytesize.get(),
-							self.parity.get(), self.stopbits.get(), xonxoff = self.flowctrl.get(),
-							rtscts = self.rts.get(), dsrdtr = self.dtr.get())
+			self.openText.set('open')
+			self.update_status_text(port + ' closed')
+			self.serialport_close()
+		
 
 	def click_refresh(self):
 		self.update_port_list_ui()
@@ -47,11 +60,16 @@ class Serial_tool(Serial_ui):
 			portList = [x for x in self.portListUI]
 		else:
 			portList = []
-			self.statusText.set('')
+			self.update_status_text('')
 		self.comList.set(tuple(portList))
 
 	def selectComPortList(self, event):
-		self.statusText.set(self.portListUI[self.listbox.get(self.listbox.curselection())])
+		if self.listbox.curselection() != ():
+			self.update_status_text(self.portListUI[self.listbox.get(self.listbox.curselection())])
+
+	def update_status_text(self, str):
+		self.statusText.set(str)
+
 
 if __name__ == '__main__':
 	root = Tk()
