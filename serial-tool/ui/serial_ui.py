@@ -47,7 +47,8 @@ class Serial_ui(Frame):
 		self.create_status_frame()
 		
 	def create_recv_frame(self):
-		self.recvText = st.ScrolledText(self.recvframe, width = 100).grid(column=1, row=1)
+		self.recvText = st.ScrolledText(self.recvframe, width = 100)
+		self.recvText.grid(column=1, row=1)
 
 	def create_configuration_frame(self):
 		#self.confTopFrame = LabelFrame(self.confFrame)

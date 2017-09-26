@@ -44,14 +44,16 @@ class Serial_port(object):
 		self.dsrdtr = dsrdtr
 		self.inter_byte_timeout = inter_byte_timeout
 		self.device = None
-		print self.port
-		print self.baudrate
-		print self.bytesize
-		print self.parity
-		print self.stopbits
-		print self.xonxoff
-		print self.rtscts
-		print self.dsrdtr
+		self.recvData = None
+		self.alive = False
+		# print self.port
+		# print self.baudrate
+		# print self.bytesize
+		# print self.parity
+		# print self.stopbits
+		# print self.xonxoff
+		# print self.rtscts
+		# print self.dsrdtr
 
 
 	def serialport_open(self):
@@ -83,12 +85,11 @@ class Serial_port(object):
 			self.device.close()
 
 	def serialport_read(self):
-		while self.alive:
+		if self.alive:
 			try:
 				number = self.device.inWaiting()
 				if number:
 					self.recvData = self.device.read(number)
-					print self.recvData
 			except IOError as e:
 				logging.error(e)
 

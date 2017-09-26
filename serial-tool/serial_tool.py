@@ -10,6 +10,7 @@ from ui.serial_ui import *
 from port.serial_port import *
 from Tkinter import *
 from ttk import *
+import threading
 
 
 class Serial_tool(Serial_ui):
@@ -30,27 +31,26 @@ class Serial_tool(Serial_ui):
 			return d	
 
 	def click_open(self):
-		if self.openText.get() == 'open':
-			if self.listbox.curselection() == ():
-				pass
-			else:
-				port = self.listbox.get(self.listbox.curselection())
-				print self.flowctrl.get()
-				print FlowCtrlList[self.flowctrl.get()]
+		if self.listbox.curselection() == ():
+			pass
+		else:
+			port = self.listbox.get(self.listbox.curselection())
+			if self.openText.get() == 'open':
 				self.serialDev = Serial_port(port, self.baudrate.get(), BytesizeList[self.bytesize.get()],
 								ParityList[self.parity.get()], StopbitsList[self.stopbits.get()], xonxoff = FlowCtrlList[self.flowctrl.get()],
 								rtscts = DtrrtsList[self.rts.get()], dsrdtr = DtrrtsList[self.dtr.get()])
 				if self.serialDev.serialport_open():
 					self.update_status_text(port + ' open successfully')
 					self.openText.set('close')
+					serialRead = threading.Thread(target = self.update_recv_text)
+					serialRead.start()
 				else:
 					self.update_status_text(port + ' open Failed, Please check the connection')
-		else:
-			self.openText.set('open')
-			self.update_status_text(port + ' closed')
-			self.serialport_close()
+			else:
+				self.openText.set('open')
+				self.update_status_text(port + ' closed')
+				self.serialDev.serialport_close()
 		
-
 	def click_refresh(self):
 		self.update_port_list_ui()
 				
@@ -70,11 +70,20 @@ class Serial_tool(Serial_ui):
 	def update_status_text(self, str):
 		self.statusText.set(str)
 
+	def update_recv_text(self):
+		while True:
+			self.serialDev.serialport_read()
+			if self.serialDev.recvData:
+				self.recvText.insert(END, self.serialDev.recvData)
+				self.serialDev.recvData = None
+
 
 if __name__ == '__main__':
 	root = Tk()
 	root.title("serial tool")
 
 	s=Serial_tool(master = root)
+
+
 
 	root.mainloop()
