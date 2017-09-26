@@ -75,6 +75,7 @@ class Serial_tool(Serial_ui):
 			self.serialDev.serialport_read()
 			if self.serialDev.recvData:
 				self.recvText.insert(END, self.serialDev.recvData)
+				self.recvText.see(END)#make sure the slider always align with bottom
 				self.serialDev.recvData = None
 
 
