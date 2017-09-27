@@ -24,7 +24,6 @@ class Serial_ui(Frame):
 	def __init__(self, parent):
 		Frame.__init__(self, parent)
 		self.pack(fill=BOTH, expand = True)
-
 		self.confFrame = LabelFrame(self)
 		self.confFrame.grid(row = 0, column = 0, sticky = 'wesn', columnspan = 2)
 		self.recvframe = LabelFrame(self)
@@ -41,6 +40,7 @@ class Serial_ui(Frame):
 		self.create_send_frame()
 		self.create_recv_frame()
 		self.create_status_frame()
+		self.click_open()
 		
 	def create_send_frame(self):
 		buttonReset = Button(self.sendframe, text='reset', command = self.click_reset).grid(column=0, row=0)
@@ -51,7 +51,7 @@ class Serial_ui(Frame):
 		Button(self.sendframe, text='send', command = self.click_send).grid(column=4, row=0)
 		
 	def create_recv_frame(self):
-		self.recvText = st.ScrolledText(self.recvframe, width = 100, height = 35)
+		self.recvText = st.ScrolledText(self.recvframe, width = 100)
 		self.recvText.grid(column=0, row=0, sticky = 'wesn')
 	# def create_configuration_frame(self):
 	# 	#self.confTopFrame = LabelFrame(self.confFrame)
@@ -64,7 +64,7 @@ class Serial_ui(Frame):
 		#selection_set(index), set item to select
 		#see(index), check the item is avaliable or not
 		#listbox.bind('<<ListboxSelect>>', func)
-		self.listbox = Listbox(self.confFrame, height = 16, width = 27, listvariable = self.comList, selectmode = 'browse', bg = 'WhiteSmoke')
+		self.listbox = Listbox(self.confFrame, width = 27, listvariable = self.comList, selectmode = 'browse', bg = 'WhiteSmoke')
 		self.listbox.grid(row = 0, column = 0, sticky = 'wesn') 
 		self.listbox.bind('<<ListboxSelect>>', self.selectComPortList)
 
@@ -73,16 +73,16 @@ class Serial_ui(Frame):
 			Label(self.confBotFrame, text=l).grid(column=0, row=index+1, sticky = 'w')
 
 		#refresh button
-		buttonRefresh = Button(self.confBotFrame, text='refresh', command = self.click_refresh).grid(column=0, row=0)
+		buttonRefresh = Button(self.confBotFrame, text='refresh', command = self.click_refresh).grid(column=0, row=0, pady = 5)
 
 		#open button
 		self.openText = StringVar()
 		self.openText.set('open')
-		buttonOpen = Button(self.confBotFrame, textvariable=self.openText, command = self.click_open).grid(column=1, row=0)
+		buttonOpen = Button(self.confBotFrame, textvariable=self.openText, command = self.click_open).grid(column=1, row=0, pady = 5)
 
 		#baudrate combobox
 		self.baudrate = Combobox(self.confBotFrame, values = BaudrateList, state = 'readonly', width = 10)
-		self.baudrate.grid(column=1, row=1, pady = 5)
+		self.baudrate.grid(column=1, row=1)
 		self.baudrate.current(2)
 		#bytesize combobox
 		self.bytesize = Combobox(self.confBotFrame, values = BytesizeList.keys(), state = 'readonly', width = 10)
@@ -114,8 +114,9 @@ class Serial_ui(Frame):
 		self.statusBar = Label(self.statusframe, width = 60, textvariable = self.statusText, background = 'WhiteSmoke').grid(column=0, row=0)
 
 	def click_open(self):
-		self.recvText.insert(END, 'TEST\n')
+		self.recvText.insert(END, 'TEST, performance, performance\n')
 		self.recvText.see(END)
+		self.after(100, self.click_open)
 
 	def click_send(self):
 		pass

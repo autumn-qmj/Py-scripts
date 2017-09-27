@@ -17,6 +17,7 @@ class Serial_tool(Serial_ui):
 
 	def __init__(self, master = None):
 		Serial_ui.__init__(self, master)
+		self.port = None
 		self.update_port_list_ui()
 
 	def serialport_list(self):
@@ -34,21 +35,20 @@ class Serial_tool(Serial_ui):
 		if self.listbox.curselection() == ():
 			pass
 		else:
-			port = self.listbox.get(self.listbox.curselection())
+			self.port = self.listbox.get(self.listbox.curselection())
 			if self.openText.get() == 'open':
-				self.serialDev = Serial_port(port, self.baudrate.get(), BytesizeList[self.bytesize.get()],
+				self.serialDev = Serial_port(self.port, self.baudrate.get(), BytesizeList[self.bytesize.get()],
 								ParityList[self.parity.get()], StopbitsList[self.stopbits.get()], xonxoff = FlowCtrlList[self.flowctrl.get()],
 								rtscts = DtrrtsList[self.rts.get()], dsrdtr = DtrrtsList[self.dtr.get()])
 				if self.serialDev.serialport_open():
-					self.update_status_text(port + ' open successfully')
+					self.update_status_text(self.port + ' open successfully')
 					self.openText.set('close')
-					serialRead = threading.Thread(target = self.update_recv_text)
-					serialRead.start()
+					self.update_recv_text()
 				else:
-					self.update_status_text(port + ' open Failed, Please check the connection')
+					self.update_status_text(self.port + ' open Failed, Please check the connection')
 			else:
 				self.openText.set('open')
-				self.update_status_text(port + ' closed')
+				self.update_status_text(self.port + ' closed')
 				self.serialDev.serialport_close()
 		
 	def click_refresh(self):
@@ -61,6 +61,10 @@ class Serial_tool(Serial_ui):
 		else:
 			portList = []
 			self.update_status_text('')
+		if self.port != None:
+			if self.port not in portList:
+				self.openText.set('open')
+				self.update_status_text(self.port + ' removed')
 		self.comList.set(tuple(portList))
 
 	def selectComPortList(self, event):
@@ -71,20 +75,17 @@ class Serial_tool(Serial_ui):
 		self.statusText.set(str)
 
 	def update_recv_text(self):
-		while True:
-			self.serialDev.serialport_read()
-			if self.serialDev.recvData:
-				self.recvText.insert(END, self.serialDev.recvData)
-				self.recvText.see(END)#make sure the slider always align with bottom
-				self.serialDev.recvData = None
-
+		self.serialDev.serialport_read()
+		if self.serialDev.recvData:
+			self.recvText.insert(END, self.serialDev.recvData)
+			self.recvText.see(END)#make sure the slider always align with bottom
+			self.serialDev.recvData = None
+		self.after(10, self.update_recv_text)
 
 if __name__ == '__main__':
 	root = Tk()
 	root.title("serial tool")
 
 	s=Serial_tool(master = root)
-
-
 
 	root.mainloop()
