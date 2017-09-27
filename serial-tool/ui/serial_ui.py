@@ -64,7 +64,7 @@ class Serial_ui(Frame):
 		#selection_set(index), set item to select
 		#see(index), check the item is avaliable or not
 		#listbox.bind('<<ListboxSelect>>', func)
-		self.listbox = Listbox(self.confFrame, height = 22, width = 27, listvariable = self.comList, selectmode = 'browse', bg = 'WhiteSmoke')
+		self.listbox = Listbox(self.confFrame, height = 16, width = 27, listvariable = self.comList, selectmode = 'browse', bg = 'WhiteSmoke')
 		self.listbox.grid(row = 0, column = 0, sticky = 'wesn') 
 		self.listbox.bind('<<ListboxSelect>>', self.selectComPortList)
 
