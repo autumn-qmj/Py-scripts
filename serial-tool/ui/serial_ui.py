@@ -35,6 +35,17 @@ class Serial_ui(Frame):
 		self.sendframe = LabelFrame(self)
 		self.sendframe.grid(row = 2, column = 2, sticky = 'wesn', columnspan = 3)
 
+		self.grid_columnconfigure(1, weight=1)
+		self.grid_rowconfigure(0, weight=1)
+
+		self.recvframe.grid_columnconfigure(0, weight=1)
+		self.recvframe.grid_rowconfigure(0, weight=1)
+
+		self.confFrame.grid_columnconfigure(0, weight=1)
+		self.confFrame.grid_rowconfigure(0, weight=1)
+		# self.confFrame.columnconfigure(0, weight=1)
+		# self.confBotFrame.columnconfigure(0, weight=1)
+
 		self.create_configuration_top_frame()
 		self.create_configuration_bot_frame()		
 		self.create_send_frame()
@@ -51,7 +62,7 @@ class Serial_ui(Frame):
 		Button(self.sendframe, text='send', command = self.click_send).grid(column=4, row=0)
 		
 	def create_recv_frame(self):
-		self.recvText = st.ScrolledText(self.recvframe, width = 100)
+		self.recvText = st.ScrolledText(self.recvframe)
 		self.recvText.grid(column=0, row=0, sticky = 'wesn')
 	# def create_configuration_frame(self):
 	# 	#self.confTopFrame = LabelFrame(self.confFrame)
@@ -64,7 +75,7 @@ class Serial_ui(Frame):
 		#selection_set(index), set item to select
 		#see(index), check the item is avaliable or not
 		#listbox.bind('<<ListboxSelect>>', func)
-		self.listbox = Listbox(self.confFrame, width = 27, listvariable = self.comList, selectmode = 'browse', bg = 'WhiteSmoke')
+		self.listbox = Listbox(self.confFrame, listvariable = self.comList, selectmode = 'browse', bg = 'WhiteSmoke')
 		self.listbox.grid(row = 0, column = 0, sticky = 'wesn') 
 		self.listbox.bind('<<ListboxSelect>>', self.selectComPortList)
 

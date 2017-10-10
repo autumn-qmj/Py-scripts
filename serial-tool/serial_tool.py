@@ -91,7 +91,10 @@ class Serial_tool(Serial_ui):
 if __name__ == '__main__':
 	root = Tk()
 	root.title("serial tool")
-
+	# root.columnconfigure(0, weight=1)
+	# root.rowconfigure(0, weight=1)
+	# root.rowconfigure(1, weight=1)
+	# root.rowconfigure(2, weight=1)
 	s=Serial_tool(master = root)
 
 	root.mainloop()
