@@ -29,10 +29,10 @@ class Serial_tool(Serial_ui):
 			return None
 		else:
 			port = [list(x) for x in portList]
+			self.portListUI = {}
 			for x in port:
 				self.portListUI[x[0]] = x[1]
 			return  [x for x in self.portListUI]
-
 
 	def click_open(self):
 		if self.listbox.curselection() == ():
@@ -58,16 +58,16 @@ class Serial_tool(Serial_ui):
 		self.update_port_list_ui()
 				
 	def update_port_list_ui(self):
-		portList = self.serialport_list()
-		if portList != None:
-			self.comList.set(tuple(portList))
+		pl = self.serialport_list()
+		if pl != None:
+			self.comList.set(tuple(pl))
 
 	def check_port_status_backend(self):
-		portList = self.serialport_list()
+		pl1 = self.serialport_list()
 		if self.port != None:
-			if self.port not in portList:
+			if self.port not in pl1:
 				self.serialDev.serialport_close()
-				self.comList.set(tuple(portList))
+				self.comList.set(tuple(pl1))
 				self.openText.set('open')
 				self.update_status_text(self.port + ' removed')
 				self.port = None
