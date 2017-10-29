@@ -62,7 +62,7 @@ class Serial_ui(Frame):
 		Button(self.sendframe, text='send', command = self.click_send).grid(column=4, row=0)
 		
 	def create_recv_frame(self):
-		self.recvText = st.ScrolledText(self.recvframe)
+		self.recvText = st.ScrolledText(self.recvframe, bg = 'Black', fg = 'White')
 		self.recvText.grid(column=0, row=0, sticky = 'wesn')
 	# def create_configuration_frame(self):
 	# 	#self.confTopFrame = LabelFrame(self.confFrame)
