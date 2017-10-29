@@ -56,14 +56,16 @@ class Serial_ui(Frame):
 	def create_send_frame(self):
 		buttonReset = Button(self.sendframe, text='reset', command = self.click_reset).grid(column=0, row=0)
 		#send button
-		self.sendText = StringVar()
-		Entry(self.sendframe, width = 40, textvariable = self.sendText).grid(column=2, row=0)
-		Button(self.sendframe, text='browse', command = self.click_browse).grid(column=3, row=0)
-		Button(self.sendframe, text='send', command = self.click_send).grid(column=4, row=0)
+		
 		
 	def create_recv_frame(self):
 		self.recvText = st.ScrolledText(self.recvframe, bg = 'Black', fg = 'White')
-		self.recvText.grid(column=0, row=0, sticky = 'wesn')
+		self.recvText.grid(column=0, row=0, columnspan = 3, sticky = 'wesn')
+
+		self.sendText = StringVar()
+		Entry(self.recvframe, width = 40, textvariable = self.sendText).grid(column=0, row=1, sticky = 'wesn')
+		Button(self.recvframe, text='browse', command = self.click_browse).grid(column=1, row=1, sticky = 'wesn')
+		Button(self.recvframe, text='send', command = self.click_send).grid(column=2, row=1, sticky = 'wesn')
 	# def create_configuration_frame(self):
 	# 	#self.confTopFrame = LabelFrame(self.confFrame)
 	# 	#self.confTopFrame.grid(row = 0, column = 0, padx = 0, pady = 0, sticky = 'n')
@@ -122,7 +124,7 @@ class Serial_ui(Frame):
 		
 	def create_status_frame(self):
 		self.statusText = StringVar()
-		self.statusBar = Label(self.statusframe, width = 60, textvariable = self.statusText, background = 'WhiteSmoke').grid(column=0, row=0)
+		self.statusBar = Label(self.statusframe, width = 60, textvariable = self.statusText, background = 'White').grid(column=0, row=0)
 
 	def click_open(self):
 		self.recvText.insert(END, 'TEST, performance, performance\n')
