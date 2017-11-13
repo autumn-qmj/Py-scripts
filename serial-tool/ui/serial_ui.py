@@ -32,8 +32,8 @@ class Serial_ui(Frame):
 		self.confBotFrame.grid(row = 1, column = 0, sticky = 'wesn')
 		self.statusframe = LabelFrame(self)
 		self.statusframe.grid(row = 2, column = 0, sticky = 'wesn', columnspan = 2)
-		self.sendframe = LabelFrame(self)
-		self.sendframe.grid(row = 2, column = 2, sticky = 'wesn', columnspan = 3)
+		self.resetframe = LabelFrame(self)
+		self.resetframe.grid(row = 2, column = 2, sticky = 'wesn', columnspan = 3)
 
 		self.grid_columnconfigure(1, weight=1)
 		self.grid_rowconfigure(0, weight=1)
@@ -46,15 +46,18 @@ class Serial_ui(Frame):
 		# self.confFrame.columnconfigure(0, weight=1)
 		# self.confBotFrame.columnconfigure(0, weight=1)
 
+		self.statusframe.grid_columnconfigure(0, weight=1)
+		self.statusframe.grid_rowconfigure(0, weight=1)
+
 		self.create_configuration_top_frame()
 		self.create_configuration_bot_frame()		
-		self.create_send_frame()
+		self.create_reset_frame()
 		self.create_recv_frame()
 		self.create_status_frame()
 		self.click_open()
 		
-	def create_send_frame(self):
-		buttonReset = Button(self.sendframe, text='reset', command = self.click_reset).grid(column=0, row=0)
+	def create_reset_frame(self):
+		buttonReset = Button(self.resetframe, text='reset', command = self.click_reset).grid(column=0, row=0)
 		#send button
 		
 		
@@ -62,8 +65,8 @@ class Serial_ui(Frame):
 		self.recvText = st.ScrolledText(self.recvframe, bg = 'Black', fg = 'White')
 		self.recvText.grid(column=0, row=0, columnspan = 3, sticky = 'wesn')
 
-		self.sendText = StringVar()
-		Entry(self.recvframe, width = 40, textvariable = self.sendText).grid(column=0, row=1, sticky = 'wesn')
+		self.sendText = Entry(self.recvframe, width = 40)
+		self.sendText.grid(column=0, row=1, sticky = 'wesn')
 		Button(self.recvframe, text='browse', command = self.click_browse).grid(column=1, row=1, sticky = 'wesn')
 		Button(self.recvframe, text='send', command = self.click_send).grid(column=2, row=1, sticky = 'wesn')
 	# def create_configuration_frame(self):
@@ -124,7 +127,7 @@ class Serial_ui(Frame):
 		
 	def create_status_frame(self):
 		self.statusText = StringVar()
-		self.statusBar = Label(self.statusframe, width = 60, textvariable = self.statusText, background = 'White').grid(column=0, row=0)
+		self.statusBar = Label(self.statusframe, textvariable = self.statusText, background = 'WhiteSmoke').grid(column=0, row=0, sticky = 'wesn')
 
 	def click_open(self):
 		self.recvText.insert(END, 'TEST, performance, performance\n')
@@ -145,7 +148,6 @@ class Serial_ui(Frame):
 
 	def click_reset(self):
 		self.recvText.delete(0.0, END)
-		self.sendText.set('')
 
 if __name__ == '__main__':
 	root = Tk()

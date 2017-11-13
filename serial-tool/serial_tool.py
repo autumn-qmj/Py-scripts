@@ -53,7 +53,12 @@ class Serial_tool(Serial_ui):
 				self.openText.set('open')
 				self.update_status_text(self.port + ' closed')
 				self.serialDev.serialport_close()
-		
+
+	def click_send(self):
+		send = self.sendText.get()
+		if send:
+			self.serialDev.serialport_write(send, False)
+
 	def click_refresh(self):
 		self.update_port_list_ui()
 				
