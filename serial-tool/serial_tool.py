@@ -38,6 +38,10 @@ class Serial_tool(Serial_ui):
 		if self.listbox.curselection() == ():
 			pass
 		else:
+			if self.port != None:
+				self.serialDev.serialport_close()
+				self.port = None
+
 			self.port = self.listbox.get(self.listbox.curselection())
 			if self.openText.get() == 'open':
 				self.serialDev = Serial_port(self.port, self.baudrate.get(), BytesizeList[self.bytesize.get()],
@@ -53,6 +57,7 @@ class Serial_tool(Serial_ui):
 				self.openText.set('open')
 				self.update_status_text(self.port + ' closed')
 				self.serialDev.serialport_close()
+				self.port = None
 
 	def click_send(self):
 		send = self.sendText.get()
@@ -81,6 +86,10 @@ class Serial_tool(Serial_ui):
 	def selectComPortList(self, event):
 		if self.listbox.curselection() != ():
 			self.update_status_text(self.portListUI[self.listbox.get(self.listbox.curselection())])
+			if self.listbox.get(self.listbox.curselection()) != self.port:
+				self.openText.set('open')
+			else:
+				self.openText.set('close')
 
 	def update_status_text(self, str):
 		self.statusText.set(str)

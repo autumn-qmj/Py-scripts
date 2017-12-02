@@ -98,6 +98,7 @@ class Serial_port(object):
 			if isHex:
 				data = binascii.unhexlify(data)
 			self.device.write(data)
+			self.device.flush()
 
 if __name__ == '__main__':
 	import threading
