@@ -62,13 +62,17 @@ class Serial_ui(Frame):
 		
 		
 	def create_recv_frame(self):
-		self.recvText = st.ScrolledText(self.recvframe, bg = 'Black', fg = 'White')
+		self.recvText = st.ScrolledText(self.recvframe, bg = 'Black', fg = 'White', insertbackground = 'White')
 		self.recvText.grid(column=0, row=0, columnspan = 3, sticky = 'wesn')
+		#self.recvText.bind("<Key>", self.disableKey)
+		#self.recvText.mark_set('test', CURRENT)
+		self.recvText.bind("<KeyRelease>", self.releaseKey)
+		self.recvText.bind("<KeyPress>", self.pressKey)
 
-		self.sendText = Entry(self.recvframe, width = 40)
-		self.sendText.grid(column=0, row=1, sticky = 'wesn')
+		self.filePath = Entry(self.recvframe, width = 40)
+		self.filePath.grid(column=0, row=1, sticky = 'wesn')
 		Button(self.recvframe, text='browse', command = self.click_browse).grid(column=1, row=1, sticky = 'wesn')
-		Button(self.recvframe, text='send', command = self.click_send).grid(column=2, row=1, sticky = 'wesn')
+		Button(self.recvframe, text='save', command = self.click_save).grid(column=2, row=1, sticky = 'wesn')
 	# def create_configuration_frame(self):
 	# 	#self.confTopFrame = LabelFrame(self.confFrame)
 	# 	#self.confTopFrame.grid(row = 0, column = 0, padx = 0, pady = 0, sticky = 'n')
@@ -130,11 +134,17 @@ class Serial_ui(Frame):
 		self.statusBar = Label(self.statusframe, textvariable = self.statusText, background = 'WhiteSmoke').grid(column=0, row=0, sticky = 'wesn')
 
 	def click_open(self):
-		self.recvText.insert(END, 'TEST, performance, performance\n')
+		self.recvText.insert(END, 'TEST, performance, performance')
 		self.recvText.see(END)
-		self.after(100, self.click_open)
+		print self.recvText.get(END)
+	
+	def releaseKey(self, event):
+		pass
 
-	def click_send(self):
+	def pressKey(self, event):
+		pass
+
+	def click_save(self):
 		pass
 
 	def click_browse(self):

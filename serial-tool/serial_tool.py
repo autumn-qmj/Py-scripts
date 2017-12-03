@@ -12,6 +12,7 @@ from Tkinter import *
 from ttk import *
 import threading
 
+supportInputChar = {'\r','\n','Q','A','Z','W','S','X','E','D','C','R','F','V','T','G','B','Y','H','N','U','J','M','I','K','O','L','P','q','a','z','w','s','x','e','d','c','r','f','v','t','g','b','y','h','n','u','j','m','i','k','l','o','p','0','9','8','7','6','5','4','3','2','1'}
 
 class Serial_tool(Serial_ui):
 
@@ -22,6 +23,7 @@ class Serial_tool(Serial_ui):
 
 		self.update_port_list_ui()
 		self.check_port_status_backend()
+		self.sendText = None
 
 	def serialport_list(self):
 		portList = list(serial.tools.list_ports.comports())
@@ -60,9 +62,7 @@ class Serial_tool(Serial_ui):
 				self.port = None
 
 	def click_send(self):
-		send = self.sendText.get()
-		if send:
-			self.serialDev.serialport_write(send, False)
+		pass
 
 	def click_refresh(self):
 		self.update_port_list_ui()
@@ -101,6 +101,14 @@ class Serial_tool(Serial_ui):
 			self.recvText.see(END)#make sure the slider always align with bottom
 			self.serialDev.recvData = None
 		self.after(10, self.update_recv_text)
+
+	def releaseKey(self, event):
+		if event.char in supportInputChar:
+			if self.port:
+		 		self.serialDev.serialport_write(event.char, False)
+
+	def pressKey(self, event):
+		pass
 
 if __name__ == '__main__':
 	root = Tk()
