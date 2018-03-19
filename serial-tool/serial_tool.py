@@ -12,7 +12,7 @@ from Tkinter import *
 from ttk import *
 import threading
 
-supportInputChar = {'\r','\n','Q','A','Z','W','S','X','E','D','C','R','F','V','T','G','B','Y','H','N','U','J','M','I','K','O','L','P','q','a','z','w','s','x','e','d','c','r','f','v','t','g','b','y','h','n','u','j','m','i','k','l','o','p','0','9','8','7','6','5','4','3','2','1'}
+supportInputChar = {'"', '.', ' ', '\r', '\n','Q','A','Z','W','S','X','E','D','C','R','F','V','T','G','B','Y','H','N','U','J','M','I','K','O','L','P','q','a','z','w','s','x','e','d','c','r','f','v','t','g','b','y','h','n','u','j','m','i','k','l','o','p','0','9','8','7','6','5','4','3','2','1','/'}
 
 class Serial_tool(Serial_ui):
 
@@ -63,6 +63,10 @@ class Serial_tool(Serial_ui):
 
 	def click_send(self):
 		pass
+
+	def click_save(self):
+		with open('log.txt', 'w') as f:
+			f.write(self.recvText.get(0.0, END))
 
 	def click_refresh(self):
 		self.update_port_list_ui()
