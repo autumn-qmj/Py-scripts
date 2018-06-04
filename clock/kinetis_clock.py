@@ -33,40 +33,49 @@ import re
 # f.flush()
 
 # f.close()
-ScriptsPath = 'C:\\CC\work\\scripts\\check sdmmc example in yml and update\\'
-WorkPath = 'C:\\CC\\work\\'
-FilePath = '\\bin\\generator\\records\\msdk\\projects\\sdk_example\\'
-BoardFilterString='.yml'
-ExampleFilterString = 'sdcard'
+ScriptsPath = 'C:\\Users\\nxa34233\\cc\\scripts\\python\\Py-scripts\\clock\\'
+WorkPath = 'C:\\Users\\nxa34233\\cc\\SDK\\mcu-sdk-2.0\\boards\\'
+c_file = '\\clock_config.c'
 
-def filter_board(f):
-	if re.search(BoardFilterString ,f):
-		return True
-	return False
+origin_string='''
+    * 1.set the run mode to a safe configurations.
+    * 2.set the PLL or FLL output target frequency for HSRUN mode.
+    * 3.switch to RUN mode maximum frequency value.
+    * 4.switch to HSRUN mode.
+    * 5.switch to HSRUN mode maximum requency value.'''
 
-def filter_example(l):
+replace_string='''
+	* 1.set the run mode to a safe configurations.
+    * 2.set the PLL or FLL output target frequency for HSRUN mode.
+    * 3.switch RUN mode configuration.
+    * 4.switch to HSRUN mode.
+    * 5.switch to HSRUN mode target requency value.'''
+
+key1=[]
+replace_dict={}
+
+def filter_device(f):
+	if re.search("lpc" ,f):
+		return False
+	return True
+
+#def analysis_func(func):
+def add_declear(f):
+	cp=f+c_file
+	print cp
 	try:
-		f=open(filePath+l, 'r+')
-		for line in f:
-			if ExampleFilterString in line:
-				f.close()
-				return True
-		f.close()
+		fd = open(cp, 'r')
+		cf=fd.read()
+		fd.close()
+		if origin_string in cf:
+			fd2 = open(cp, 'w')
+			fd2.write(cf.replace(origin_string, replace_string))
+			fd2.close()
+		
 	except IOError,(errno, strerror):
-		print(l+'I/O error(%s):%s' %(errno, strerror)) 
-	return False
-
-# def update_example(l):
-# 	f=open(l, 'r')
-# 	f1=open(ScriptsPath + 'mmc.yml', 'r')
-# 	f2=f.read()+f1.read()
-# 	f.close()
-# 	f1.close()
-# 	f=open(l, 'w+')
-# 	f.writelines(f2)
-# 	f.close()
-# 	return False
-
+		print(f[0]+'I/O error(%s):%s' %(errno, strerror))
+	
+		
 def filter_dir(x):
 	if os.path.isdir(x):
 		return True
@@ -78,21 +87,24 @@ def update_example(l):
 	l=filter(filter_dir, sl)
 	print(l)
 
-print('Input SDK path:')
-sdkPath = raw_input()
-filePath = WorkPath + sdkPath + FilePath
+
+print 'update clock'
+filePath = WorkPath
 if os.access(filePath, os.F_OK):
 	os.chdir(filePath)
 else:
 	print('can not access the input path')
 print(os.getcwd())
 l=os.listdir(filePath)
+print l
 #specifiy the board
-l = filter(filter_board, l)
-print(l)
-#specifiy the example
-l=filter(filter_example, l)
+l = filter(filter_device, l)
+
+l = [filePath + x for x in l]
+print l
+#specifiy the driver dir
+l=filter(filter_dir, l)
 print (l)
-l=[WorkPath  + sdkPath +  "\\boards\\" + x.replace(".yml", "") for x in l]
-print('Total boards: %d\n'%len(l))
-#map(update_example, l)
+#add file name
+
+map(add_declear, l)

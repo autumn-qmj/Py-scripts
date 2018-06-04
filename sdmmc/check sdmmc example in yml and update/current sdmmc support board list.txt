@@ -1,0 +1,39 @@
+sdspi
+'frdmk22f.yml', 'mapsks22.yml', 'twrk21d50m.yml', 'twrk22f120m.yml', 'twrk24f120m.yml', 'twrk64f120m.yml', 'twrkv31f120m.yml
+
+sdcard
+['evkmcimx6ul.yml', 'evkmcimx6ull.yml', 'evkmimxrt1050.yml', 'evk_k32h844p.yml', 'frdmk28f.yml', 'frdmk32w042_m0p.yml', 'frdmk32w042_m4.yml', 'frdmk64f.yml', 'frdmk66f.yml', 'hexiwear.yml', 'lpcxpresso54018.yml', 'lpcxpresso54608.yml', 'lpcxpresso54618.yml', 'lpcxpresso54628.yml', 'lpcxpresso54s618.yml', 'twrk21f120m.yml', 'twrk60d100m.yml', 'twrk64f120m.yml', 'twrk65f180m.yml', 'x_k3s1m_dc_176_m4.yml']
+
+mmccard
+['evkmcimx6ul.yml', 'evkmcimx6ull.yml', 'evkmimxrt1050.yml', 'evk_k32h844p.yml', 'lpcxpresso54018.yml', 'lpcxpresso54608.yml', 'lpcxpresso54618.yml', 'lpcxpresso54628.yml', 'lpcxpresso54s618.yml', 'twrk21f120m.yml', 'twrk60d100m.yml', 'twrk64f120m.yml', 'twrk65f180m.yml', 'x_k3s1m_dc_176_m4.yml']
+
+sdio
+['evkmcimx6ul.yml', 'evkmcimx6ull.yml', 'evk_k32h844p.yml', 'lpcxpresso54018.yml', 'lpcxpresso54608.yml', 'lpcxpresso54618.yml', 'lpcxpresso54628.yml', 'lpcxpresso54s618.yml', 'x_k3s1m_dc_176_m4.yml']
+
+
+
+frdmk22f
+mapsks22
+twrk21d50m
+twrk22f120m
+twrk24f120m
+twrk64f120m
+twrkv31f120m
+evkmcimx6ul
+evkmcimx6ull
+evkmimxrt1050
+evk_k32h844p
+frdmk28f
+frdmk32w042_m0p
+frdmk32w042_m4
+frdmk64f
+frdmk66f
+hexiwear
+lpcxpresso54018
+lpcxpresso54608
+lpcxpresso54618
+lpcxpresso54628
+lpcxpresso54s618 
+twrk21f120m 
+twrk60d100m
+twrk65f180m

@@ -39,7 +39,7 @@ FilePath = '\\bin\\generator\\records\\msdk\\projects\\sdk_example\\'
 
 device = '\\devices\\'
 device_driver = '\\drivers\\'
-BoardFilterString='LPC5'
+BoardFilterString='LPC'
 ExampleFilterString = 'fsl_clock.c'
 function_name = 'uint32_t CLOCK_GetFreq(clock_name_t clockName)'
 function_case = 'case '
@@ -49,6 +49,36 @@ function_div = 'DIV'
 
 key1=[]
 replace_dict={}
+
+# template ='
+#     uint32_t freq = 0U;
+
+#     switch(sel)
+#     {
+#         case 0U:
+#           freq = CLOCK_GetCoreSysClkFreq();
+#           break;
+#         case 1U:
+#           freq = CLOCK_GetPllOutFreq();
+#           break;
+#         case 2U:
+#           freq = CLOCK_GetUsbPllOutFreq();
+#           break;
+#         case 3U:
+#           freq = CLOCK_GetFroHfFreq();
+#           break;
+#         case 4U:
+#           freq = CLOCK_GetAudioPllOutFreq();
+#           break;
+#         case 7U:
+#           freq = 0U;
+#           break;
+#         default:
+#           break;
+#     }
+
+#     return freq / ((SYSCON->SDIOCLKDIV&0xffU)+1U);
+# }'
 
 def filter_device(f):
 	if re.search(BoardFilterString ,f):
@@ -114,59 +144,28 @@ def update_code(f, key, index):
 		print(f[0]+'I/O error(%s):%s' %(errno, strerror))
 
 def get_func(f):
-	print f
-	found=False
-	readindex = False
-	index=[]
-	func=[]
-	key=[]
-	j=0
+	found = False;
+	new = []
+	function = []
+
 	try:
 		f1=open(f, 'r')
 		
 		for line in f1.readlines():
-			if readindex:
-				index.append(line)
-				readindex=False
+			
+			if found:
+				if '}' in line:
+					found = False
+				function.append(line)
+			else:
+				new.append(line)
 
-			if function_name in line:
+			if 'uint32_t CLOCK_Get' in line:
+				if 'uint32_t CLOCK_GetFreq' in line:
+					continue
 				found = True
 
-			if found == True:
-				if function_case in line:
-					func.append(line)
-					readindex = True
-
-				if function_end in line:
-					break
-		
-		func = [x.replace(function_case, '') for x in func]
-		func = [x.replace(':\n', '') for x in func]
-		func = [x.replace('kCLOCK_', '') for x in func]
-		func = [x.replace('  ', '') for x in func]
-		index = [x.replace('freq = ', '') for x in index]
-		index = [x.replace('  ', '') for x in index]
-		index = [x.replace(' ', '') for x in index]
-		index = [x.replace(';\n', '') for x in index]
-		for i in func:
-			pos = index[j].split('/')
-			if i.lower() in pos[0].lower():
-				if function_div in index[j]:
-					replace_dict[pos[0]] = pos[1]
-					key.append(pos[0])
-					key1.append(pos[0])
-			j = j+1
-
-		f1.close()
-
-		print func
-		print index
-		print replace_dict
-		key=['uint32_t ' + x.replace('()', '') for x in key]
-		j=0
-		for x in key:
-			update_code(f, key, j)
-			j=j+1
+		print function
 
 	except IOError,(errno, strerror):
 		print(f[0]+'I/O error(%s):%s' %(errno, strerror)) 
@@ -204,38 +203,13 @@ print(os.getcwd())
 l=os.listdir(filePath)
 #specifiy the board
 l = filter(filter_device, l)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-l.pop(0)
-print(0)
+
 l = [filePath + x + device_driver for x in l]
-print l
 #specifiy the driver dir
 l=filter(filter_dir, l)
-print (l)
 #add file name
 l = [x + ExampleFilterString for x in l]
+print l
+print len(l)
 
 get_func(l[0])
-
-#map(get_func, l)
