@@ -86,13 +86,14 @@ def clock_patcher_merge(list, path):
 		elif func['status'].replace('\n', '')=='update':
 			clck_patcher_merge_update(code, func, newPath)
 
-		
-
-def clock_patcher(list, path):
+def clock_patcher(list):
 	#list0 is the support devices name
 	suppotDevices=list[0][CLOCK_PATCHER_SUPPORT_DEVICES_KEY].replace('\n','')
 	new=list[1:]
 	#print new
+	print 'please input you SDK path:'
+	path=raw_input()
+	print path
 	devicesPath=[path+CLOCK_PATCHER_SDK_DEVICES+x+CLOCK_PATCHER_SDK_DEVICES_DRIVERS for x in clock_patcher_find_devices(suppotDevices, path)]
 	for device in devicesPath:
 		if os.access(device, os.F_OK):
@@ -102,16 +103,16 @@ def clock_patcher(list, path):
 
 def clock_updater(devices):
 	path=add_subdir(os.getcwd(), devices)
+	print path
 	if os.access(path, os.F_OK):
 		os.chdir(path)
+		print "Prepare to analysis clock patch"
+		clock_patcher(clock_analysis(add_subdir(path,CLOCK_PATCHER_NAME)))
 	else:
 		print('can not access the input path')
 	
-	print "Prepare to analysis clock patch"
-	clock_patcher(clock_analysis(add_subdir(path,CLOCK_PATCHER_NAME)), path.replace('\\bin\\clock_merger\\clock\\lpc\\'+devices, ''))
-
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description="clock updater")
+	parser = argparse.ArgumentParser(description="clock patcher")
 
 	parser.add_argument("-d", "--devices", type=str, help="device name, i.e. LPC8XX", required=True)
 
