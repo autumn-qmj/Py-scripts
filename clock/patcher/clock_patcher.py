@@ -58,14 +58,26 @@ def clck_patcher_merge_update(code, func, newPath):
 		print newPath+'\n************update finish*************'
 
 def clck_patcher_merge_new(code, func, newPath):
-	#get index
-	index=code.find(func['depend'].replace('\n', ''))
-	if func['position'].replace('\n', '')=='end':
-		index=code.find(';', index)+1
-	code=code[:index]+func['body_new']+code[index:]
-	with open(newPath, 'w') as fw:
-		fw.write(code)
-	print newPath+'\n************add new func finish*************'
+	if func['body_new'] not in code:
+		#get index
+		index=code.find(func['depend'].replace('\n', ''))
+		if func['position'].replace('\n', '')=='end':
+			index=code.find(';', index)+1
+		code=code[:index]+func['body_new']+code[index:]
+		with open(newPath, 'w') as fw:
+			fw.write(code)
+		print newPath+'\n************add new func finish*************'
+
+def clck_patcher_merge_replace(code, func, newPath):
+	if func['depend'] in code:
+		#get index
+		index=code.find(func['depend'].replace('\n', ''))
+		endindex=code.find('\n}', index)+2
+		code=code[:index]+func['body_new']+code[endindex:]
+		with open(newPath, 'w') as fw:
+			fw.write(code)
+		print newPath+'\n************replace func finish*************'
+
 
 def clock_patcher_merge(list, path):
 	for func in list:
@@ -85,15 +97,15 @@ def clock_patcher_merge(list, path):
 			clck_patcher_merge_new(code, func, newPath)
 		elif func['status'].replace('\n', '')=='update':
 			clck_patcher_merge_update(code, func, newPath)
+		elif func['status'].replace('\n', '')=='replace':
+			clck_patcher_merge_replace(code, func, newPath)
 
-def clock_patcher(list):
+
+def clock_patcher(list, path):
 	#list0 is the support devices name
 	suppotDevices=list[0][CLOCK_PATCHER_SUPPORT_DEVICES_KEY].replace('\n','')
 	new=list[1:]
 	#print new
-	print 'please input you SDK path:'
-	path=raw_input()
-	print path
 	devicesPath=[path+CLOCK_PATCHER_SDK_DEVICES+x+CLOCK_PATCHER_SDK_DEVICES_DRIVERS for x in clock_patcher_find_devices(suppotDevices, path)]
 	for device in devicesPath:
 		if os.access(device, os.F_OK):
@@ -101,16 +113,23 @@ def clock_patcher(list):
 		else:
 			print devicesPath+' not exist'
 
-def clock_updater(devices):
+def clock_updater(devices, sdkpath):
 	path=add_subdir(os.getcwd(), devices)
+	print 'clock patch path is:'
 	print path
 	if os.access(path, os.F_OK):
 		os.chdir(path)
 		print "Prepare to analysis clock patch"
-		clock_patcher(clock_analysis(add_subdir(path,CLOCK_PATCHER_NAME)))
+		clock_patcher(clock_analysis(add_subdir(path,CLOCK_PATCHER_NAME)), sdkpath)
 	else:
 		print('can not access the input path')
-	
+
+def clock_patcher_get_sdk_path():
+	pathFile=os.getcwd()+'\\path.txt'
+	with open(pathFile) as f:
+			path=f.read()
+	return path
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description="clock patcher")
 
@@ -119,5 +138,9 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	devices = args.devices
 
-	clock_updater(devices)
+	sdkpath=clock_patcher_get_sdk_path()
+	print 'target sdk path is:'
+	print sdkpath
+
+	clock_updater(devices, sdkpath)
 
