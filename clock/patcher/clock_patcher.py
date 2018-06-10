@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-'generator clock code automatically'
+'clock patcher'
 
 __author__ = 'cc'
 
 import os
 import re
 import argparse
+from xml_analysis import *
 
 CLOCK_PATCHER_SUPPORT_DEVICES_KEY='support_devices'
 CLOCK_PATCHER_NAME="fsl_clock.c"
@@ -79,6 +80,15 @@ def clck_patcher_merge_replace(code, func, newPath):
 		print newPath+'\n************replace func finish*************'
 
 
+def clock_patcher_merge_dependency(code, func, path):
+	#check dependency
+	depend=func['depend'].replace('\n', '')
+	if 'F:' in depend:
+		if depend.replace('F:','') not in code:
+			return False
+	elif 'R:' in depend:
+		if depend.replace('R:','') not in xml_peripheral_reg(xml_analysis(device, peripheral, path)):
+
 def clock_patcher_merge(list, path):
 	for func in list:
 		#if status is ignore, skipped
@@ -89,9 +99,7 @@ def clock_patcher_merge(list, path):
 		with open(newPath) as fr:
 			code=fr.read()
 
-		#check dependency
-		if func['depend'].replace('\n', '') not in code:
-			continue
+		
 
 		if func['status'].replace('\n', '')=='new':
 			clck_patcher_merge_new(code, func, newPath)

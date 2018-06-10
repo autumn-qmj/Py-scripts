@@ -2,11 +2,13 @@
 
 //*function_start*/ 
 //*function_location#fsl_clock.c
-//*function_depend#void CLOCK_InitExtClkin(uint32_t clkInFreq)
+//*function_depend#F:void CLOCK_InitExtClkin(uint32_t clkInFreq)
 //*function_status#ignore
 //*function_position#in
 //*function_name#
-void CLOCK_InitExtClkin(uint32_t clkInFreq)
+void CLOCK_InitExtClkin
+//*function_paramter#
+(uint32_t clkInFreq)
 //*function_body_old#
     /* bypass system oscillator */
     SYSCON->SYSOSCCTRL |= SYSCON_SYSOSCCTRL_BYPASS_MASK;
@@ -15,7 +17,7 @@ void CLOCK_InitExtClkin(uint32_t clkInFreq)
 
 //*function_start*/ 
 //*function_location#fsl_clock.c
-//*function_depend#void CLOCK_InitExtClkin(uint32_t clkInFreq)
+//*function_depend#F:void CLOCK_InitExtClkin(uint32_t clkInFreq)
 //*function_status#ignore
 //*function_position#in
 //*function_name#
@@ -38,7 +40,7 @@ void CLOCK_InitXtalin(uint32_t oscFreq)
 
 //*function_start*/
 //*function_location#fsl_clock.c
-//*function_depend#void CLOCK_InitXtalin(uint32_t oscFreq)
+//*function_depend#F:void CLOCK_InitXtalin(uint32_t oscFreq)
 //*function_status#replace
 //*function_position#before
 //*function_body_new#
@@ -72,7 +74,7 @@ void CLOCK_InitXtalin(uint32_t xtalInFreq)
 
 //*function_start*/
 //*function_location#fsl_clock.h
-//*function_depend#void CLOCK_InitSysOsc(uint32_t oscFreq);
+//*function_depend#F:void CLOCK_InitSysOsc(uint32_t oscFreq);
 //*function_status#ignore
 //*function_position#end
 //*function_body_new#
