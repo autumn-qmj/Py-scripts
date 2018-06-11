@@ -89,37 +89,36 @@ def clock_patcher_merge_dependency(code, func, path):
 	elif 'R:' in depend:
 		if depend.replace('R:','') not in xml_peripheral_reg(xml_analysis(device, peripheral, path)):
 
-def clock_patcher_merge(list, path):
-	for func in list:
-		#if status is ignore, skipped
-		if func['status'].replace('\n', '')=='ignore':
-			continue
-		#add location to get file content
-		newPath=add_subdir(path, func['location'].replace('\n', ''))
-		with open(newPath) as fr:
-			code=fr.read()
+def clock_patcher_merge(list, path, device):
+	path=path+CLOCK_PATCHER_SDK_DEVICES+device+CLOCK_PATCHER_SDK_DEVICES_DRIVERS
+	if os.access(path, os.F_OK):
+		for func in list:
+			#if status is ignore, skipped
+			if func['status'].replace('\n', '')=='ignore':
+				continue
+			#add location to get file content
+			newPath=add_subdir(path, func['location'].replace('\n', ''))
+			with open(newPath) as fr:
+				code=fr.read()	
 
-		
-
-		if func['status'].replace('\n', '')=='new':
-			clck_patcher_merge_new(code, func, newPath)
-		elif func['status'].replace('\n', '')=='update':
-			clck_patcher_merge_update(code, func, newPath)
-		elif func['status'].replace('\n', '')=='replace':
-			clck_patcher_merge_replace(code, func, newPath)
-
+			if func['status'].replace('\n', '')=='new':
+				clck_patcher_merge_new(code, func, newPath)
+			elif func['status'].replace('\n', '')=='update':
+				clck_patcher_merge_update(code, func, newPath)
+			elif func['status'].replace('\n', '')=='replace':
+				clck_patcher_merge_replace(code, func, newPath)
+		else:
+			print devicesPath+' not exist'
 
 def clock_patcher(list, path):
 	#list0 is the support devices name
-	suppotDevices=list[0][CLOCK_PATCHER_SUPPORT_DEVICES_KEY].replace('\n','')
+	targetDevices=list[0][CLOCK_PATCHER_SUPPORT_DEVICES_KEY].replace('\n','')
 	new=list[1:]
+	#get support devices
+	supportDevice=clock_patcher_find_devices(targetDevices, path)
 	#print new
-	devicesPath=[path+CLOCK_PATCHER_SDK_DEVICES+x+CLOCK_PATCHER_SDK_DEVICES_DRIVERS for x in clock_patcher_find_devices(suppotDevices, path)]
-	for device in devicesPath:
-		if os.access(device, os.F_OK):
-			clock_patcher_merge(new, device)
-		else:
-			print devicesPath+' not exist'
+	for device in supportDevice:
+		clock_patcher_merge(new, path, device)
 
 def clock_updater(devices, sdkpath):
 	path=add_subdir(os.getcwd(), devices)
