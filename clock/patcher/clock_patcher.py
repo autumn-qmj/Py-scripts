@@ -45,41 +45,6 @@ def clock_patcher_find_devices(target, path):
 			nl.insert(0, d)
 	return nl
 
-def clck_patcher_merge_update(code, func, newPath):
-	#get index
-	index=code.find(func['name'].replace('\n', ''))
-	bodyindex=code.find('\n{', index)
-	bodyendindex=code.find('\n}', index)
-	funccode=code[bodyindex:bodyendindex]
-	if func['body_old'] in funccode:
-		newfunccode=funccode.replace(func['body_old'], func['body_new'])
-		code=code.replace(funccode, newfunccode)
-		with open(newPath, 'w') as fw:
-			fw.write(code)
-		print newPath+'\n************update finish*************'
-
-def clck_patcher_merge_new(code, func, newPath):
-	if func['body_new'] not in code:
-		#get index
-		index=code.find(func['depend'].replace('\n', ''))
-		if func['position'].replace('\n', '')=='end':
-			index=code.find(';', index)+1
-		code=code[:index]+func['body_new']+code[index:]
-		with open(newPath, 'w') as fw:
-			fw.write(code)
-		print newPath+'\n************add new func finish*************'
-
-def clck_patcher_merge_replace(code, func, newPath):
-	if func['depend'] in code:
-		#get index
-		index=code.find(func['depend'].replace('\n', ''))
-		endindex=code.find('\n}', index)+2
-		code=code[:index]+func['body_new']+code[endindex:]
-		with open(newPath, 'w') as fw:
-			fw.write(code)
-		print newPath+'\n************replace func finish*************'
-
-
 def clock_patcher_merge_dependency(code, func, path):
 	#check dependency
 	depend=func['depend'].replace('\n', '')
@@ -88,6 +53,69 @@ def clock_patcher_merge_dependency(code, func, path):
 			return False
 	elif 'R:' in depend:
 		if depend.replace('R:','') not in xml_peripheral_reg(xml_analysis(device, peripheral, path)):
+
+# def clck_patcher_merge_update(func, newPath):
+# 	with open(newPath) as fr:
+# 		code=fr.read()	
+# 	#get index
+# 	index=code.find(func['name'].replace('\n', ''))
+# 	bodyindex=code.find('\n{', index)
+# 	bodyendindex=code.find('\n}', index)
+# 	funccode=code[bodyindex:bodyendindex]
+# 	if func['body_old'] in funccode:
+# 		newfunccode=funccode.replace(func['body_old'], func['body_new'])
+# 		code=code.replace(funccode, newfunccode)
+# 		with open(newPath, 'w') as fw:
+# 			fw.write(code)
+# 		print newPath+'\n************update finish*************'
+
+def clck_patcher_merge_new(func, newPath):
+	with open(newPath) as fr:
+		code=fr.read()	
+	if func['body_new'] not in code:
+		#get index
+		index=code.find(func['depend'].replace('\n', ''))
+		if func['position'].replace('\n', '')=='end':
+			index=code.find(';', index)+1
+
+		#analysis code patch dependency
+		patch=clock_patcher_merge_dependency(func['body_new'])
+
+		code=code[:index]+patch+code[index:]
+		
+		with open(newPath, 'w') as fw:
+			fw.write(code)
+		print newPath+'\n************add new func finish*************'
+
+def clck_patcher_merge_replace(func, newPath):
+	with open(newPath) as fr:
+		code=fr.read()	
+	if func['depend'] in code:
+		#get index
+		index=code.find(func['depend'].replace('\n', ''))
+		bodyindex=code.find('\n{', index)
+		bodyendindex=code.find('\n}', index)
+		funccode=code[bodyindex:bodyendindex]
+		if func['body_old'] in funccode:
+			newfunccode=funccode.replace(func['body_old'], func['body_new'])
+			code=code.replace(funccode, newfunccode)
+		if func.has_keys('body_new'):
+			endindex=code.find('\n}', index)+2
+			#code=code[:index]+func['body_new']+code[endindex:]
+			patch=func['body_new']
+		if func.has_keys('name_new'):
+			endindex=code.find('\n{', index)
+			#code=code[:index]+func['name_new']+code[endindex:]
+			patch=func['name_new']
+
+		#analysis code patch dependency
+		patch=clock_patcher_merge_dependency(patch)
+		#merge into the codebase
+		code=code[:index]+patch+code[endindex:]
+		#write into file
+		with open(newPath, 'w') as fw:
+			fw.write(code)
+		print newPath+'\n************replace func finish*************'
 
 def clock_patcher_merge(list, path, device):
 	path=path+CLOCK_PATCHER_SDK_DEVICES+device+CLOCK_PATCHER_SDK_DEVICES_DRIVERS
@@ -98,15 +126,13 @@ def clock_patcher_merge(list, path, device):
 				continue
 			#add location to get file content
 			newPath=add_subdir(path, func['location'].replace('\n', ''))
-			with open(newPath) as fr:
-				code=fr.read()	
 
 			if func['status'].replace('\n', '')=='new':
-				clck_patcher_merge_new(code, func, newPath)
-			elif func['status'].replace('\n', '')=='update':
-				clck_patcher_merge_update(code, func, newPath)
+				clck_patcher_merge_new(func, newPath)
+			# elif func['status'].replace('\n', '')=='update':
+			# 	clck_patcher_merge_update(func, newPath)
 			elif func['status'].replace('\n', '')=='replace':
-				clck_patcher_merge_replace(code, func, newPath)
+				clck_patcher_merge_replace(func, newPath)
 		else:
 			print devicesPath+' not exist'
 

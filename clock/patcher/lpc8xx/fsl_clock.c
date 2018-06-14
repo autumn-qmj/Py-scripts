@@ -6,9 +6,9 @@
 //*function_status#ignore
 //*function_position#in
 //*function_name#
-void CLOCK_InitExtClkin
-//*function_paramter#
-(uint32_t clkInFreq)
+void CLOCK_InitExtClkin(uint32_t clkInFreq)
+//*function_name_new#
+void CLOCK_InitExtClkin(uint8_t clkInFreq)
 //*function_body_old#
     /* bypass system oscillator */
     SYSCON->SYSOSCCTRL |= SYSCON_SYSOSCCTRL_BYPASS_MASK;
