@@ -76,8 +76,9 @@ def clck_patcher_merge_new(func, newPath):
 		#get index
 		index=code.find(func['depend'].replace('\n', ''))
 		if func['position'].replace('\n', '')=='end':
-			index=code.find(';', index)+1
-
+			index=code.find('\n}', index)+1
+		if func['position'].replace('\n', '')=='before':
+			index=index-1
 		#analysis code patch dependency
 		patch=clock_patcher_merge_dependency(func['body_new'])
 
@@ -85,7 +86,7 @@ def clck_patcher_merge_new(func, newPath):
 		
 		with open(newPath, 'w') as fw:
 			fw.write(code)
-		print newPath+'\n************add new func finish*************'
+		print newPath+'\n************add new code finish*************'
 
 def clck_patcher_merge_replace(func, newPath):
 	with open(newPath) as fr:
@@ -93,17 +94,16 @@ def clck_patcher_merge_replace(func, newPath):
 	if func['depend'] in code:
 		#get index
 		index=code.find(func['depend'].replace('\n', ''))
-		bodyindex=code.find('\n{', index)
-		bodyendindex=code.find('\n}', index)
-		funccode=code[bodyindex:bodyendindex]
-		if func['body_old'] in funccode:
-			newfunccode=funccode.replace(func['body_old'], func['body_new'])
-			code=code.replace(funccode, newfunccode)
-		if func.has_keys('body_new'):
+		if func.has_keys('body_old'):
+			if func['body_old'] in funccode:
+				oldercode=clock_patcher_merge_dependency(func['body_old'])
+				patch=func['body_new']
+				endindex=code.find(oldercode, index)+len(oldercode)
+		elif func.has_keys('body_new'):
 			endindex=code.find('\n}', index)+2
 			#code=code[:index]+func['body_new']+code[endindex:]
 			patch=func['body_new']
-		if func.has_keys('name_new'):
+		elif func.has_keys('name_new'):
 			endindex=code.find('\n{', index)
 			#code=code[:index]+func['name_new']+code[endindex:]
 			patch=func['name_new']
@@ -115,7 +115,7 @@ def clck_patcher_merge_replace(func, newPath):
 		#write into file
 		with open(newPath, 'w') as fw:
 			fw.write(code)
-		print newPath+'\n************replace func finish*************'
+		print newPath+'\n************replace code finish*************'
 
 def clock_patcher_merge(list, path, device):
 	path=path+CLOCK_PATCHER_SDK_DEVICES+device+CLOCK_PATCHER_SDK_DEVICES_DRIVERS
@@ -133,8 +133,8 @@ def clock_patcher_merge(list, path, device):
 			# 	clck_patcher_merge_update(func, newPath)
 			elif func['status'].replace('\n', '')=='replace':
 				clck_patcher_merge_replace(func, newPath)
-		else:
-			print devicesPath+' not exist'
+	else:
+		print path+' not exist'
 
 def clock_patcher(list, path):
 	#list0 is the support devices name
