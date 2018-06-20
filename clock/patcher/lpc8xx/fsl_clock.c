@@ -23,6 +23,7 @@ void CLOCK_InitExtClkin(uint8_t clkInFreq)
 //*function_name#
 void CLOCK_InitXtalin(uint32_t oscFreq)
 //*function_body_old#
+    @R@reg@b@bits@
     /* remove the pull up and pull down resistors in the IOCON */
     IOCON->PIO[IOCON_INDEX_PIO0_9] &= ~IOCON_PIO_MODE_MASK;
     IOCON->PIO[IOCON_INDEX_PIO0_8] &= ~IOCON_PIO_MODE_MASK;
@@ -41,7 +42,7 @@ void CLOCK_InitXtalin(uint32_t oscFreq)
 //*function_start*/
 //*function_location#fsl_clock.c
 //*function_depend#F:void CLOCK_InitXtalin(uint32_t oscFreq)
-//*function_status#replace
+//*function_status#ignore
 //*function_position#before
 //*function_body_new#
 void CLOCK_InitXtalin(uint32_t xtalInFreq)
@@ -86,3 +87,4 @@ void CLOCK_InitXtalin(uint32_t xtalInFreq)
  */
 void CLOCK_InitXtalIn(uint32_t xtalInFreq);
 //*function_end
+

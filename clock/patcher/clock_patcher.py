@@ -45,15 +45,10 @@ def clock_patcher_find_devices(target, path):
 			nl.insert(0, d)
 	return nl
 
-def clock_patcher_merge_dependency(code, func, path):
+def clock_patcher_merge_dependency(patch, path):
 	#check dependency
-	depend=func['depend'].replace('\n', '')
-	if 'F:' in depend:
-		if depend.replace('F:','') not in code:
-			return False
-	elif 'R:' in depend:
-		if depend.replace('R:','') not in xml_peripheral_reg(xml_analysis(device, peripheral, path)):
-
+	section=re.split(r'//\*function_start\*/', patch)
+	pass
 # def clck_patcher_merge_update(func, newPath):
 # 	with open(newPath) as fr:
 # 		code=fr.read()	
@@ -80,7 +75,7 @@ def clck_patcher_merge_new(func, newPath):
 		if func['position'].replace('\n', '')=='before':
 			index=index-1
 		#analysis code patch dependency
-		patch=clock_patcher_merge_dependency(func['body_new'])
+		patch=clock_patcher_merge_dependency(func['body_new'], path)
 
 		code=code[:index]+patch+code[index:]
 		
@@ -96,7 +91,7 @@ def clck_patcher_merge_replace(func, newPath):
 		index=code.find(func['depend'].replace('\n', ''))
 		if func.has_keys('body_old'):
 			if func['body_old'] in funccode:
-				oldercode=clock_patcher_merge_dependency(func['body_old'])
+				oldercode=clock_patcher_merge_dependency(func['body_old'], path)
 				patch=func['body_new']
 				endindex=code.find(oldercode, index)+len(oldercode)
 		elif func.has_keys('body_new'):
@@ -109,7 +104,7 @@ def clck_patcher_merge_replace(func, newPath):
 			patch=func['name_new']
 
 		#analysis code patch dependency
-		patch=clock_patcher_merge_dependency(patch)
+		patch=clock_patcher_merge_dependency(patch, path)
 		#merge into the codebase
 		code=code[:index]+patch+code[endindex:]
 		#write into file
