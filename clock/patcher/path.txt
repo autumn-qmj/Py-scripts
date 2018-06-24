@@ -1,1 +1,1 @@
-C:\\Users\\nxa34233\\cc\\SDK\\mcu-sdk-2.0
+C:\Users\cc\Desktop\scripts\Py-scripts\clock\patcher\sdk

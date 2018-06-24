@@ -11,14 +11,15 @@ import argparse
 from xml_analysis import *
 
 CLOCK_PATCHER_SUPPORT_DEVICES_KEY='support_devices'
-CLOCK_PATCHER_NAME="fsl_clock.c"
 CLOCK_PATCHER_FUNCTION=[]
 CLOCK_PATCHER_SUPPORT_DEVICE=''
 CLOCK_PATCHER_SDK_DEVICES='\\devices\\'
-CLOCK_PATCHER_SDK_DEVICES_DRIVERS='\\drivers'
+CLOCK_PATCHER_SDK_DEVICES_DRIVERS='drivers'
 
-def add_subdir(path, sub):
-	return path+'\\'+sub
+def add_subdir(path, *dir):
+	for x in dir:
+		path=path+'\\'+x
+	return path
 
 def clock_section_anaysis(section):
 	subsection=re.split(r'//\*function_', section)
@@ -30,11 +31,14 @@ def clock_section_anaysis(section):
 	return dict
 
 def clock_analysis(path):
-	#print path
-	with open(path) as fd:
-		patch=fd.read()
-	section=re.split(r'//\*function_start\*/', patch)
-	return map(clock_section_anaysis, section)	
+	files=os.listdir(path)
+	dict={}
+	for f in files:
+		with open(add_subdir(path, f)) as fd:
+			patch=fd.read()
+		section=re.split(r'//\*function_start\*/', patch)
+		dict[f]=map(clock_section_anaysis, section[1:])
+	return dict
 
 def clock_patcher_find_devices(target, path):
 	path=path+CLOCK_PATCHER_SDK_DEVICES
@@ -47,8 +51,9 @@ def clock_patcher_find_devices(target, path):
 
 def clock_patcher_merge_dependency(patch, path):
 	#check dependency
-	section=re.split(r'//\*function_start\*/', patch)
-	pass
+	section=re.split(r'@', patch)
+	#print section
+	return patch
 # def clck_patcher_merge_update(func, newPath):
 # 	with open(newPath) as fr:
 # 		code=fr.read()	
@@ -65,17 +70,20 @@ def clock_patcher_merge_dependency(patch, path):
 # 		print newPath+'\n************update finish*************'
 
 def clck_patcher_merge_new(func, newPath):
+	newPath=add_subdir(newPath, CLOCK_PATCHER_SDK_DEVICES_DRIVERS, func['location'].replace('\n', ''))
 	with open(newPath) as fr:
 		code=fr.read()	
-	if func['body_new'] not in code:
+	if func['depend'] in code:
 		#get index
 		index=code.find(func['depend'].replace('\n', ''))
-		if func['position'].replace('\n', '')=='end':
-			index=code.find('\n}', index)+1
-		if func['position'].replace('\n', '')=='before':
+		#if target position is header file, then put it after dependency.
+		if func['location'].replace('\n', '')=='fsl_clock.h':
+			index +=len(func['depend'])
+		#if target position is in source file, then put it before dependency.
+		else:
 			index=index-1
 		#analysis code patch dependency
-		patch=clock_patcher_merge_dependency(func['body_new'], path)
+		patch=clock_patcher_merge_dependency(func['body_new'], newPath)
 
 		code=code[:index]+patch+code[index:]
 		
@@ -83,63 +91,63 @@ def clck_patcher_merge_new(func, newPath):
 			fw.write(code)
 		print newPath+'\n************add new code finish*************'
 
-def clck_patcher_merge_replace(func, newPath):
+def clck_patcher_merge_replace(func, path):
+	newPath=add_subdir(path, CLOCK_PATCHER_SDK_DEVICES_DRIVERS, func['location'].replace('\n', ''))
 	with open(newPath) as fr:
 		code=fr.read()	
 	if func['depend'] in code:
 		#get index
 		index=code.find(func['depend'].replace('\n', ''))
-		if func.has_keys('body_old'):
-			if func['body_old'] in funccode:
-				oldercode=clock_patcher_merge_dependency(func['body_old'], path)
+		if func.has_key('body_old'):
+			oldercode=clock_patcher_merge_dependency(func['body_old'], path)
+			if oldercode in code[index:]:
 				patch=func['body_new']
-				endindex=code.find(oldercode, index)+len(oldercode)
-		elif func.has_keys('body_new'):
-			endindex=code.find('\n}', index)+2
-			#code=code[:index]+func['body_new']+code[endindex:]
-			patch=func['body_new']
-		elif func.has_keys('name_new'):
+				newindex=code.find(oldercode)
+				#analysis code patch dependency
+				patch=clock_patcher_merge_dependency(patch, path)
+				#merge into the codebase
+				code=code[:newindex]+patch+code[newindex+len(oldercode):]
+			else:
+				print oldercode + 'not found'
+		if func.has_key('name_new'):
 			endindex=code.find('\n{', index)
 			#code=code[:index]+func['name_new']+code[endindex:]
 			patch=func['name_new']
-
-		#analysis code patch dependency
-		patch=clock_patcher_merge_dependency(patch, path)
-		#merge into the codebase
-		code=code[:index]+patch+code[endindex:]
+			#analysis code patch dependency
+			patch=clock_patcher_merge_dependency(patch, path)
+			#merge into the codebase
+			code=code[:index]+patch+code[endindex:]
 		#write into file
 		with open(newPath, 'w') as fw:
 			fw.write(code)
-		print newPath+'\n************replace code finish*************'
+		print '\n************replace code finish*************'
 
 def clock_patcher_merge(list, path, device):
-	path=path+CLOCK_PATCHER_SDK_DEVICES+device+CLOCK_PATCHER_SDK_DEVICES_DRIVERS
+	path=path+CLOCK_PATCHER_SDK_DEVICES+device
 	if os.access(path, os.F_OK):
 		for func in list:
 			#if status is ignore, skipped
 			if func['status'].replace('\n', '')=='ignore':
 				continue
 			#add location to get file content
-			newPath=add_subdir(path, func['location'].replace('\n', ''))
+			# newPath=add_subdir(path, func['location'].replace('\n', ''))
 
 			if func['status'].replace('\n', '')=='new':
-				clck_patcher_merge_new(func, newPath)
+				clck_patcher_merge_new(func, path)
 			# elif func['status'].replace('\n', '')=='update':
 			# 	clck_patcher_merge_update(func, newPath)
 			elif func['status'].replace('\n', '')=='replace':
-				clck_patcher_merge_replace(func, newPath)
+				clck_patcher_merge_replace(func, path)
 	else:
 		print path+' not exist'
 
-def clock_patcher(list, path):
-	#list0 is the support devices name
-	targetDevices=list[0][CLOCK_PATCHER_SUPPORT_DEVICES_KEY].replace('\n','')
-	new=list[1:]
+def clock_patcher(dict, path, devices):
 	#get support devices
-	supportDevice=clock_patcher_find_devices(targetDevices, path)
-	#print new
+	supportDevice=clock_patcher_find_devices(devices, path)
 	for device in supportDevice:
-		clock_patcher_merge(new, path, device)
+		print 'updating device: ' + device
+		for list in dict.values():
+			clock_patcher_merge(list, path, device)
 
 def clock_updater(devices, sdkpath):
 	path=add_subdir(os.getcwd(), devices)
@@ -148,7 +156,7 @@ def clock_updater(devices, sdkpath):
 	if os.access(path, os.F_OK):
 		os.chdir(path)
 		print "Prepare to analysis clock patch"
-		clock_patcher(clock_analysis(add_subdir(path,CLOCK_PATCHER_NAME)), sdkpath)
+		clock_patcher(clock_analysis(path), sdkpath, devices)
 	else:
 		print('can not access the input path')
 
