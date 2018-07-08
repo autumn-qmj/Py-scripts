@@ -14,11 +14,16 @@ uint32_t CLOCK_GetFROFreq(void)
 
 //*function_start*/
 //*function_location#fsl_clock.c
-//*function_depend#uint32_t CLOCK_GetFroFreq(void)
+//*function_depend#uint32_t CLOCK_GetClockOutClkFreq(void)
 //*function_status#new
 //*function_body_new#
 uint32_t test(void)
 {
     /* test function */
+$$
+@R@FROOSCCTRL@RB@CORESEL@
+    I AM test code
+$$
+    i AM common code
 }
 //*function_end

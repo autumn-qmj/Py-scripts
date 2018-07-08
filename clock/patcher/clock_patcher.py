@@ -49,11 +49,31 @@ def clock_patcher_find_devices(target, path):
 			nl.insert(0, d)
 	return nl
 
-def clock_patcher_merge_dependency(patch, path):
+def clock_patcher_merge_dependency(patch, path, device):
 	#check dependency
-	section=re.split(r'@', patch)
-	#print section
-	return patch
+	section=re.split(r'\$\$\n', patch)
+	xml=xml_analysis(device, 'SYSCON', path)
+	regs=xml_get_peripheral_regs(xml)
+	newPatch=section[0]
+	for x in section[1:]:
+		subsection=re.split(r'@', x)
+		if 'R' in subsection:
+			dr=subsection[subsection.index('R')+1]
+			if dr in regs:
+				if 'RB' in subsection:
+					regbits=xml_get_periperal_regs_bits(xml, dr)
+					drb=subsection[subsection.index('RB')+1]
+					print drb
+					print regbits
+					if drb in regbits:
+						newPatch=newPatch + str(subsection[subsection.index(drb)+1])
+				else:
+					newPatch=newPatch + str(subsection[subsection.index(dr)+1])
+			else:
+				print 'tets'
+		else:
+			newPatch=newPatch + str(subsection[0])
+	return newPatch
 # def clck_patcher_merge_update(func, newPath):
 # 	with open(newPath) as fr:
 # 		code=fr.read()	
@@ -69,8 +89,8 @@ def clock_patcher_merge_dependency(patch, path):
 # 			fw.write(code)
 # 		print newPath+'\n************update finish*************'
 
-def clck_patcher_merge_new(func, newPath):
-	newPath=add_subdir(newPath, CLOCK_PATCHER_SDK_DEVICES_DRIVERS, func['location'].replace('\n', ''))
+def clck_patcher_merge_new(func, path, device):
+	newPath=add_subdir(path, CLOCK_PATCHER_SDK_DEVICES_DRIVERS, func['location'].replace('\n', ''))
 	with open(newPath) as fr:
 		code=fr.read()	
 	if func['depend'] in code:
@@ -83,7 +103,7 @@ def clck_patcher_merge_new(func, newPath):
 		else:
 			index=index-1
 		#analysis code patch dependency
-		patch=clock_patcher_merge_dependency(func['body_new'], newPath)
+		patch=clock_patcher_merge_dependency(func['body_new'], path, device)
 
 		code=code[:index]+patch+code[index:]
 		
@@ -91,7 +111,7 @@ def clck_patcher_merge_new(func, newPath):
 			fw.write(code)
 		print newPath+'\n************add new code finish*************'
 
-def clck_patcher_merge_replace(func, path):
+def clck_patcher_merge_replace(func, path, device):
 	newPath=add_subdir(path, CLOCK_PATCHER_SDK_DEVICES_DRIVERS, func['location'].replace('\n', ''))
 	with open(newPath) as fr:
 		code=fr.read()	
@@ -99,12 +119,12 @@ def clck_patcher_merge_replace(func, path):
 		#get index
 		index=code.find(func['depend'].replace('\n', ''))
 		if func.has_key('body_old'):
-			oldercode=clock_patcher_merge_dependency(func['body_old'], path)
+			oldercode=clock_patcher_merge_dependency(func['body_old'], path, device)
 			if oldercode in code[index:]:
 				patch=func['body_new']
 				newindex=code.find(oldercode)
 				#analysis code patch dependency
-				patch=clock_patcher_merge_dependency(patch, path)
+				patch=clock_patcher_merge_dependency(patch, path, device)
 				#merge into the codebase
 				code=code[:newindex]+patch+code[newindex+len(oldercode):]
 			else:
@@ -114,7 +134,7 @@ def clck_patcher_merge_replace(func, path):
 			#code=code[:index]+func['name_new']+code[endindex:]
 			patch=func['name_new']
 			#analysis code patch dependency
-			patch=clock_patcher_merge_dependency(patch, path)
+			patch=clock_patcher_merge_dependency(patch, path, device)
 			#merge into the codebase
 			code=code[:index]+patch+code[endindex:]
 		#write into file
@@ -133,11 +153,11 @@ def clock_patcher_merge(list, path, device):
 			# newPath=add_subdir(path, func['location'].replace('\n', ''))
 
 			if func['status'].replace('\n', '')=='new':
-				clck_patcher_merge_new(func, path)
+				clck_patcher_merge_new(func, path, device)
 			# elif func['status'].replace('\n', '')=='update':
 			# 	clck_patcher_merge_update(func, newPath)
 			elif func['status'].replace('\n', '')=='replace':
-				clck_patcher_merge_replace(func, path)
+				clck_patcher_merge_replace(func, path, device)
 	else:
 		print path+' not exist'
 
