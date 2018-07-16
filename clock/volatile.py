@@ -4,6 +4,9 @@
 'Check and update sdmmc example requirement in yml file '
 
 
+test1
+test2
+test3
 __author__ = 'cc'
 
 import os
