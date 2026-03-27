@@ -181,8 +181,9 @@ section_layout :cm4:linear
     // Exported symbols for application use
     "__ROM_CODE_START"     = __FLASH_START;
     "__RAM_STACK_START"    = __SRAM_STACK_START;
-    "__VECTORTABLE_START"  = "__lc_ub_vector_table";
-    "__Vectors"            = "__lc_ub_vector_table";
+    "__VECTORTABLE_START"  = __FLASH_START;
+    "__Vectors"            = __FLASH_START;
+    "_lc_vtor_value"       = __FLASH_START;
     "LINKER_ID"            = 0;
 
     // ==================== FLASH Region ====================
