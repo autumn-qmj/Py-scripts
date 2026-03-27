@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.tasking.config.arm.abs.debug.438403614">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.tasking.config.arm.abs.debug.438403614" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="com.tasking.managedbuilder.TASKING_IHEX" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="com.tasking.managedbuilder.TASKING_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="com.tasking.managedbuilder.TASKING_SRECORD" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="com.tasking.managedbuilder.TskRegexErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="abs" artifactName="XC2xx_Template_Cm4" buildArtefactType="com.tasking.arm.buildArtefactType.elf" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=com.tasking.arm.buildArtefactType.elf" cleanCommand="&quot;${PRODDIR}/bin/rm&quot; -rf" description="" id="com.tasking.config.arm.abs.debug.438403614" name="Debug" parent="com.tasking.config.arm.abs.debug">
+					<folderInfo id="com.tasking.config.arm.abs.debug.438403614." name="/" resourcePath="">
+						<toolChain id="com.tasking.arm.abs.debug.2108871320" name="TASKING Arm toolset" superClass="com.tasking.arm.abs.debug">
+							<option id="com.tasking.arm.pluginVersion.1539389188" name="Plugin version" superClass="com.tasking.arm.pluginVersion" value="1.257.0.0" valueType="string"/>
+							<option id="com.tasking.arm.prodDir.1704123176" name="Product directory:" superClass="com.tasking.arm.prodDir" value="${eclipse_home}/.." valueType="string"/>
+							<option id="com.tasking.arm.cpu.433676024" name="Processor:" superClass="com.tasking.arm.cpu" value="cortex_m7" valueType="string"/>
+							<targetPlatform archList="all" binaryParser="com.tasking.managedbuilder.TASKING_ELF;com.tasking.managedbuilder.TASKING_SRECORD;com.tasking.managedbuilder.TASKING_IHEX" id="com.tasking.arm.platform.abs.debug.435608740" name="Debug" osList="" superClass="com.tasking.arm.platform.abs.debug"/>
+							<builder buildPath="${workspace_loc:/XC2xx_Template_Cm4}/Debug" id="com.tasking.arm.builder.abs.debug.895085732" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="TASKING Arm Makefile generator" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.tasking.arm.builder.abs.debug"/>
+							<tool id="com.tasking.arm.cc.abs.debug.407067886" name="C/C++ Compiler" superClass="com.tasking.arm.cc.abs.debug">
+								<option id="com.tasking.arm.cc.pr36858.150454420" name="workaround for PR36858" superClass="com.tasking.arm.cc.pr36858" value="true" valueType="string"/>
+								<option id="com.tasking.arm.cc.cmsisIncludePaths.1359262786" name="Add CMSIS include paths" superClass="com.tasking.arm.cc.cmsisIncludePaths" value="false" valueType="boolean"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.cc.includePaths.519729191" name="Include paths" superClass="com.tasking.arm.cc.includePaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+								</option>
+								<inputType id="com.tasking.arm.cppInputType.398915323" name="C++" superClass="com.tasking.arm.cppInputType"/>
+								<inputType id="com.tasking.arm.cpp.cInputType.1887210543" name="C" superClass="com.tasking.arm.cpp.cInputType"/>
+								<inputType id="com.tasking.arm.cc.msInputType.1183640103" name="MS" superClass="com.tasking.arm.cc.msInputType"/>
+							</tool>
+							<tool id="com.tasking.arm.as.abs.debug.136765559" name="Assembler" superClass="com.tasking.arm.as.abs.debug">
+								<inputType id="com.tasking.arm.asmInputType.853791116" name="ASM" superClass="com.tasking.arm.asmInputType"/>
+							</tool>
+							<tool id="com.tasking.arm.lk.abs.debug.968817195" name="Linker" superClass="com.tasking.arm.lk.abs.debug">
+								<option id="com.tasking.arm.lk.lslFile.253677492" superClass="com.tasking.arm.lk.lslFile" value="../linker/flash/${ProjName}.lsl" valueType="string"/>
+								<inputType id="com.tasking.arm.lkObjInputType.1305388270" name="OBJ" superClass="com.tasking.arm.lkObjInputType"/>
+								<inputType id="com.tasking.arm.lkLibInputType.201220526" name="LIB" superClass="com.tasking.arm.lkLibInputType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule addStartupFiles="false" moduleId="com.tasking.processor"/>
+			<storageModule moduleId="com.tasking.toolInfo">
+				<toolInfo>TASKING VX-toolset for Arm v7.1r1 - program builder Build 24082661</toolInfo>
+			</storageModule>
+		</cconfiguration>
+		<cconfiguration id="com.tasking.config.arm.abs.release.218144613">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.tasking.config.arm.abs.release.218144613" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="com.tasking.managedbuilder.TASKING_IHEX" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="com.tasking.managedbuilder.TASKING_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="com.tasking.managedbuilder.TASKING_SRECORD" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="com.tasking.managedbuilder.TskRegexErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="abs" artifactName="XC2xx_Template_Cm4" buildArtefactType="com.tasking.arm.buildArtefactType.elf" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=com.tasking.arm.buildArtefactType.elf" cleanCommand="&quot;${PRODDIR}/bin/rm&quot; -rf" description="" id="com.tasking.config.arm.abs.release.218144613" name="Release" parent="com.tasking.config.arm.abs.release">
+					<folderInfo id="com.tasking.config.arm.abs.release.218144613." name="/" resourcePath="">
+						<toolChain id="com.tasking.arm.abs.release.329240045" name="TASKING Arm toolset" superClass="com.tasking.arm.abs.release">
+							<option id="com.tasking.arm.pluginVersion.1905064713" name="Plugin version" superClass="com.tasking.arm.pluginVersion" value="1.257.0.0" valueType="string"/>
+							<option id="com.tasking.arm.prodDir.1187555126" name="Product directory:" superClass="com.tasking.arm.prodDir" value="${eclipse_home}/.." valueType="string"/>
+							<option id="com.tasking.arm.cpu.180722953" name="Processor:" superClass="com.tasking.arm.cpu" value="cortex_m7" valueType="string"/>
+							<targetPlatform archList="all" binaryParser="com.tasking.managedbuilder.TASKING_ELF;com.tasking.managedbuilder.TASKING_SRECORD;com.tasking.managedbuilder.TASKING_IHEX" id="com.tasking.arm.platform.abs.release.540809510" name="Release" osList="" superClass="com.tasking.arm.platform.abs.release"/>
+							<builder buildPath="${workspace_loc:/XC2xx_Template_Cm4}/Release" id="com.tasking.arm.builder.abs.debug.1259768933" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="TASKING Arm Makefile generator" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.tasking.arm.builder.abs.debug"/>
+							<tool id="com.tasking.arm.cc.abs.release.1423795978" name="C/C++ Compiler" superClass="com.tasking.arm.cc.abs.release">
+								<option id="com.tasking.arm.cc.pr36858.796728461" name="workaround for PR36858" superClass="com.tasking.arm.cc.pr36858" value="true" valueType="string"/>
+								<option id="com.tasking.arm.cc.cmsisIncludePaths.1788750972" name="Add CMSIS include paths" superClass="com.tasking.arm.cc.cmsisIncludePaths" value="false" valueType="boolean"/>
+								<inputType id="com.tasking.arm.cppInputType.855973649" name="C++" superClass="com.tasking.arm.cppInputType"/>
+								<inputType id="com.tasking.arm.cpp.cInputType.1332875264" name="C" superClass="com.tasking.arm.cpp.cInputType"/>
+								<inputType id="com.tasking.arm.cc.msInputType.463565465" name="MS" superClass="com.tasking.arm.cc.msInputType"/>
+							</tool>
+							<tool id="com.tasking.arm.as.abs.release.97462453" name="Assembler" superClass="com.tasking.arm.as.abs.release">
+								<inputType id="com.tasking.arm.asmInputType.956768268" name="ASM" superClass="com.tasking.arm.asmInputType"/>
+							</tool>
+							<tool id="com.tasking.arm.lk.abs.release.857585314" name="Linker" superClass="com.tasking.arm.lk.abs.release">
+								<inputType id="com.tasking.arm.lkObjInputType.1392100090" name="OBJ" superClass="com.tasking.arm.lkObjInputType"/>
+								<inputType id="com.tasking.arm.lkLibInputType.1469183469" name="LIB" superClass="com.tasking.arm.lkLibInputType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule addStartupFiles="false" moduleId="com.tasking.processor"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="XC2xx_Template_Cm4.com.tasking.arm.target.abs.104949698" name="TASKING Arm Application" projectType="com.tasking.arm.target.abs"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.tasking.config.arm.abs.release.218144613;com.tasking.config.arm.abs.release.218144613.">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.tasking.arm.TskARMScannerInfo"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.tasking.config.arm.abs.debug.438403614;com.tasking.config.arm.abs.debug.438403614.">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.tasking.arm.TskARMScannerInfo"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.core.language.mapping">
+		<project-mappings>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cHeader" language="com.tasking.arm.clanguage"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cSource" language="com.tasking.arm.clanguage"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cxxHeader" language="com.tasking.arm.cpplanguage"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cxxSource" language="com.tasking.arm.cpplanguage"/>
+		</project-mappings>
+	</storageModule>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/XC2xx_Template_Cm4"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/XC2xx_Template_Cm4"/>
+		</configuration>
+	</storageModule>
+</cproject>
