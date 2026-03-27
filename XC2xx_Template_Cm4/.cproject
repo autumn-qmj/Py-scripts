@@ -41,10 +41,19 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="com.tasking.config.arm.abs.debug.438403614.startup" name="startup" resourcePath="startup">
+						<toolChain id="com.tasking.arm.abs.debug.startup.2108871321" name="TASKING Arm toolset" superClass="com.tasking.arm.abs.debug">
+							<option id="com.tasking.arm.pluginVersion.1539389189" name="Plugin version" superClass="com.tasking.arm.pluginVersion" value="1.257.0.0" valueType="string"/>
+							<tool id="com.tasking.arm.as.abs.debug.startup.136765560" name="Assembler" superClass="com.tasking.arm.as.abs.debug">
+								<option id="com.tasking.arm.as.fileExtensions.853791117" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
+								<inputType id="com.tasking.arm.asmInputType.853791117" name="ASM" superClass="com.tasking.arm.asmInputType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-			<storageModule addStartupFiles="true" moduleId="com.tasking.processor"/>
+			<storageModule addStartupFiles="false" moduleId="com.tasking.processor"/>
 			<storageModule moduleId="com.tasking.toolInfo">
 				<toolInfo>TASKING VX-toolset for Arm v7.1r1 - program builder Build 24082661</toolInfo>
 			</storageModule>
@@ -85,10 +94,19 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="com.tasking.config.arm.abs.release.218144613.startup" name="startup" resourcePath="startup">
+						<toolChain id="com.tasking.arm.abs.release.startup.329240046" name="TASKING Arm toolset" superClass="com.tasking.arm.abs.release">
+							<option id="com.tasking.arm.pluginVersion.1905064714" name="Plugin version" superClass="com.tasking.arm.pluginVersion" value="1.257.0.0" valueType="string"/>
+							<tool id="com.tasking.arm.as.abs.release.startup.97462454" name="Assembler" superClass="com.tasking.arm.as.abs.release">
+								<option id="com.tasking.arm.as.fileExtensions.956768269" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
+								<inputType id="com.tasking.arm.asmInputType.956768269" name="ASM" superClass="com.tasking.arm.asmInputType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-			<storageModule addStartupFiles="true" moduleId="com.tasking.processor"/>
+			<storageModule addStartupFiles="false" moduleId="com.tasking.processor"/>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
