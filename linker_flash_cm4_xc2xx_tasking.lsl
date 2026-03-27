@@ -156,6 +156,8 @@ section_layout :cm4:linear
     group ( ordered, run_addr = __FLASH_START )
     {
         select ".intvec_init";
+        select ".intvec";
+        select "__Vectors";
     }
 
     // Startup and initialization code
@@ -201,7 +203,7 @@ section_layout :cm4:linear
     // Zero-initialized data (BSS) in SRAM
     group ( ordered )
     {
-        select ".bss";
+        select ".bss" (attributes = -n);
         select ".mcal_bss.*";
     }
 
