@@ -228,7 +228,7 @@ section_layout :cm7_0:linear
     "__FLS_AC_BLANKREAD_FUNC_PTR_IN_RAM"   = __FLS_RSV_RAM_START;
 
     // VTOR initialization value
-    "_lc_vtor_value" = "__CM7_0_VECTOR_TABLE_RUN_ADDR";
+    "_lc_vtor_value" = __CM7_0_VECTOR_TABLE_RUN_ADDR;
 
     // Exported symbols for application use
     "__ROM_CODE_START"         = __FLASH_C0_START;
