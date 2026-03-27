@@ -25,6 +25,7 @@
 								<option id="com.tasking.arm.cc.cmsisIncludePaths.1359262786" name="Add CMSIS include paths" superClass="com.tasking.arm.cc.cmsisIncludePaths" value="false" valueType="boolean"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.cc.includePaths.519729191" name="Include paths" superClass="com.tasking.arm.cc.includePaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
 								</option>
 								<inputType id="com.tasking.arm.cppInputType.398915323" name="C++" superClass="com.tasking.arm.cppInputType"/>
 								<inputType id="com.tasking.arm.cpp.cInputType.1887210543" name="C" superClass="com.tasking.arm.cpp.cInputType"/>
@@ -32,6 +33,10 @@
 							</tool>
 							<tool id="com.tasking.arm.as.abs.debug.136765559" name="Assembler" superClass="com.tasking.arm.as.abs.debug">
 								<option id="com.tasking.arm.as.fileExtensions.853791116" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.as.includePaths.853791116" name="Include paths" superClass="com.tasking.arm.as.includePaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
+								</option>
 								<inputType id="com.tasking.arm.asmInputType.853791116" name="ASM" superClass="com.tasking.arm.asmInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.lk.abs.debug.968817195" name="Linker" superClass="com.tasking.arm.lk.abs.debug">
@@ -46,6 +51,10 @@
 							<option id="com.tasking.arm.pluginVersion.1539389189" name="Plugin version" superClass="com.tasking.arm.pluginVersion" value="1.257.0.0" valueType="string"/>
 							<tool id="com.tasking.arm.as.abs.debug.startup.136765560" name="Assembler" superClass="com.tasking.arm.as.abs.debug">
 								<option id="com.tasking.arm.as.fileExtensions.853791117" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.as.includePaths.startup.853791117" name="Include paths" superClass="com.tasking.arm.as.includePaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
+								</option>
 								<inputType id="com.tasking.arm.asmInputType.853791117" name="ASM" superClass="com.tasking.arm.asmInputType"/>
 							</tool>
 						</toolChain>
@@ -80,12 +89,20 @@
 							<tool id="com.tasking.arm.cc.abs.release.1423795978" name="C/C++ Compiler" superClass="com.tasking.arm.cc.abs.release">
 								<option id="com.tasking.arm.cc.pr36858.796728461" name="workaround for PR36858" superClass="com.tasking.arm.cc.pr36858" value="true" valueType="string"/>
 								<option id="com.tasking.arm.cc.cmsisIncludePaths.1788750972" name="Add CMSIS include paths" superClass="com.tasking.arm.cc.cmsisIncludePaths" value="false" valueType="boolean"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.cc.includePaths.519729192" name="Include paths" superClass="com.tasking.arm.cc.includePaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
+								</option>
 								<inputType id="com.tasking.arm.cppInputType.855973649" name="C++" superClass="com.tasking.arm.cppInputType"/>
 								<inputType id="com.tasking.arm.cpp.cInputType.1332875264" name="C" superClass="com.tasking.arm.cpp.cInputType"/>
 								<inputType id="com.tasking.arm.cc.msInputType.463565465" name="MS" superClass="com.tasking.arm.cc.msInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.as.abs.release.97462453" name="Assembler" superClass="com.tasking.arm.as.abs.release">
 								<option id="com.tasking.arm.as.fileExtensions.956768268" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.as.includePaths.956768268" name="Include paths" superClass="com.tasking.arm.as.includePaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
+								</option>
 								<inputType id="com.tasking.arm.asmInputType.956768268" name="ASM" superClass="com.tasking.arm.asmInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.lk.abs.release.857585314" name="Linker" superClass="com.tasking.arm.lk.abs.release">
@@ -99,6 +116,10 @@
 							<option id="com.tasking.arm.pluginVersion.1905064714" name="Plugin version" superClass="com.tasking.arm.pluginVersion" value="1.257.0.0" valueType="string"/>
 							<tool id="com.tasking.arm.as.abs.release.startup.97462454" name="Assembler" superClass="com.tasking.arm.as.abs.release">
 								<option id="com.tasking.arm.as.fileExtensions.956768269" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.tasking.arm.as.includePaths.startup.956768269" name="Include paths" superClass="com.tasking.arm.as.includePaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
+								</option>
 								<inputType id="com.tasking.arm.asmInputType.956768269" name="ASM" superClass="com.tasking.arm.asmInputType"/>
 							</tool>
 						</toolChain>
