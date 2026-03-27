@@ -5,6 +5,8 @@
 //  Description :  LSL file for the Infineon XC2xx device (Cortex-M4)
 //                 Converted from IAR ICF to TASKING LSL
 //
+//  This version does NOT generate startup code - use with your own startup_cm4.s
+//
 //  Memory Layout:
 //  -------------
 //  INT           : 0x20000000 - 0x200001FF    512 B  (Interrupt Vector Table)
@@ -40,7 +42,7 @@
 #define __SRAM_START             0x20000200
 #define __SRAM_END               0x2001DAFF
 #define __SRAM_STACK_START       0x2001DB00
-#define __SRAM_STACK_END         0x2001FB00
+#define __SRAM_STACK_END         0x2001FAFF
 
 #define __FLS_RSV_RAM_START      0x2001FB00
 #define __FLS_RSV_RAM_END        0x2001FFFF
@@ -58,32 +60,6 @@
 #ifndef __CM4_HEAP
 #  define __CM4_HEAP 4k
 #endif
-
-//
-// Vector table configuration
-//
-#define __NR_OF_VECTORS          256
-#define __CM4_NR_OF_VECTORS      __NR_OF_VECTORS
-
-#ifndef __CM4_VECTOR_TABLE_ROM_ADDR
-#  define __CM4_VECTOR_TABLE_ROM_ADDR  __FLASH_START
-#endif
-
-#ifndef __CM4_VECTOR_TABLE_RAM_ADDR
-#  define __CM4_VECTOR_TABLE_RAM_ADDR  __INT_START
-#endif
-
-// Copy vector table to INT RAM at startup
-#ifdef __CM4_VECTOR_TABLE_RAM_COPY
-# define __CM4_VECTOR_TABLE_COPY_ATTRIBUTE copy,
-# define __CM4_VECTOR_TABLE_RUN_ADDR __CM4_VECTOR_TABLE_RAM_ADDR
-#else
-# define __CM4_VECTOR_TABLE_COPY_ATTRIBUTE
-# define __CM4_VECTOR_TABLE_RUN_ADDR __CM4_VECTOR_TABLE_ROM_ADDR
-#endif
-
-#define __CM4_VECTOR_TABLE_SIZE (__CM4_NR_OF_VECTORS * 4)
-#define __THUMB_OFFSET 1
 
 #include "arm_mc_arch.lsl"
 
@@ -133,51 +109,12 @@ section_setup :cm4:linear
         min_size = __CM4_HEAP
     );
 
-    // Start address
-    start_address
-    (
-#ifdef __CM4_START
-        run_addr = __CM4_START | __THUMB_OFFSET,
-#endif
-        symbol = "Reset_Handler"
-    );
-
     // Copy table for data initialization
     copytable
     (
         align = 8,
         dest = linear
     );
-
-#if !defined(__CM4_NO_AUTO_VECTORS) && !defined(__CM4_NO_DEFAULT_AUTO_VECTORS)
-    // Vector table with handler addresses
-    vector_table "vector_table"
-    (
-        vector_size = 4,
-        size = __CM4_NR_OF_VECTORS,
-        run_addr = __CM4_VECTOR_TABLE_RUN_ADDR,
-        template = ".text.handler_address",
-        template_symbol = "_lc_vector_handler",
-        vector_prefix = "_vector_",
-        __CM4_VECTOR_TABLE_COPY_ATTRIBUTE
-        fill = loop,
-        no_inline
-    )
-    {
-        vector ( id =   0, fill = "_lc_ub_stack" );
-        vector ( id =   1, fill = "Reset_Handler" );
-        vector ( id =   2, optional, fill = "NMI_Handler" );
-        vector ( id =   3, optional, fill = "HardFault_Handler" );
-        vector ( id =   4, optional, fill = "MemManage_Handler" );
-        vector ( id =   5, optional, fill = "BusFault_Handler" );
-        vector ( id =   6, optional, fill = "UsageFault_Handler" );
-        vector ( id =  11, optional, fill = "SVC_Handler" );
-        vector ( id =  12, optional, fill = "DebugMon_Handler" );
-        vector ( id =  14, optional, fill = "PendSV_Handler" );
-        vector ( id =  15, optional, fill = "SysTick_Handler" );
-        // Add device-specific interrupt vectors here
-    }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -209,25 +146,13 @@ section_layout :cm4:linear
     "__FLS_AC_WRITE_FUNC_PTR_IN_RAM"       = __FLS_RSV_RAM_START;
     "__FLS_AC_BLANKREAD_FUNC_PTR_IN_RAM"   = __FLS_RSV_RAM_START;
 
-    // VTOR initialization value
-    "_lc_vtor_value" = __CM4_VECTOR_TABLE_RUN_ADDR;
-
     // Exported symbols for application use
     "__ROM_CODE_START" = __FLASH_START;
     "__RAM_STACK_START" = __SRAM_STACK_START;
     "LINKER_ID"        = 0;
 
-    // Vector table in ROM or INT RAM
-#ifdef __CM4_VECTOR_TABLE_RAM_COPY
-    group ( contiguous, ordered, load_addr = __CM4_VECTOR_TABLE_ROM_ADDR )
-    {
-        select "_vector_0";
-        select "_vector_1";
-    }
-#endif
-
     // ==================== FLASH Region ====================
-    // Vector table initialization code (first in flash, aligned to 512)
+    // Vector table (must be first, at flash start)
     group ( ordered, run_addr = __FLASH_START )
     {
         select ".intvec_init";
@@ -281,7 +206,7 @@ section_layout :cm4:linear
     }
 
     // ==================== INT RAM Region ====================
-    // Vector table in INT RAM
+    // Vector table in INT RAM (if copied from Flash)
     group ( ordered, run_addr = __INT_START )
     {
         select ".intvec";

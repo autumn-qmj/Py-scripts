@@ -5,6 +5,8 @@
 //  Description :  LSL file for the Infineon XC27x device (Core 0)
 //                 Converted from IAR ICF to TASKING LSL
 //
+//  This version does NOT generate startup code - use with your own startup_cm7.s
+//
 //  Memory Layout:
 //  -------------
 //  ITCM          : 0x00000000 - 0x00007FFF   32 KB  (Instruction TCM)
@@ -41,7 +43,7 @@
 #define __DTCM_START             0x20000000
 #define __DTCM_END               0x2000EFFF
 #define __DTCM_STACK_START       0x2000F000
-#define __DTCM_STACK_END         0x20010000
+#define __DTCM_STACK_END         0x2000FFFF
 
 #define __FLASH_C0_START         0x10000000
 #define __FLASH_C0_END           0x101FF7FF
@@ -69,32 +71,6 @@
 #ifndef __CM7_0_HEAP
 #  define __CM7_0_HEAP 4k
 #endif
-
-//
-// Vector table configuration
-//
-#define __NR_OF_VECTORS          256
-#define __CM7_0_NR_OF_VECTORS    __NR_OF_VECTORS
-
-#ifndef __CM7_0_VECTOR_TABLE_ROM_ADDR
-#  define __CM7_0_VECTOR_TABLE_ROM_ADDR  __FLASH_C0_START
-#endif
-
-#ifndef __CM7_0_VECTOR_TABLE_RAM_ADDR
-#  define __CM7_0_VECTOR_TABLE_RAM_ADDR  __ITCM_START
-#endif
-
-// Copy vector table to ITCM at startup
-#ifdef __CM7_0_VECTOR_TABLE_RAM_COPY
-# define __CM7_0_VECTOR_TABLE_COPY_ATTRIBUTE copy,
-# define __CM7_0_VECTOR_TABLE_RUN_ADDR __CM7_0_VECTOR_TABLE_RAM_ADDR
-#else
-# define __CM7_0_VECTOR_TABLE_COPY_ATTRIBUTE
-# define __CM7_0_VECTOR_TABLE_RUN_ADDR __CM7_0_VECTOR_TABLE_ROM_ADDR
-#endif
-
-#define __CM7_0_VECTOR_TABLE_SIZE (__CM7_0_NR_OF_VECTORS * 4)
-#define __THUMB_OFFSET 1
 
 #include "arm_mc_arch.lsl"
 
@@ -144,51 +120,12 @@ section_setup :cm7_0:linear
         min_size = __CM7_0_HEAP
     );
 
-    // Start address
-    start_address
-    (
-#ifdef __CM7_0_START
-        run_addr = __CM7_0_START | __THUMB_OFFSET,
-#endif
-        symbol = "Reset_Handler"
-    );
-
     // Copy table for data initialization
     copytable
     (
         align = 8,
         dest = linear
     );
-
-#if !defined(__CM7_0_NO_AUTO_VECTORS) && !defined(__CM7_0_NO_DEFAULT_AUTO_VECTORS)
-    // Vector table with handler addresses
-    vector_table "vector_table"
-    (
-        vector_size = 4,
-        size = __CM7_0_NR_OF_VECTORS,
-        run_addr = __CM7_0_VECTOR_TABLE_RUN_ADDR,
-        template = ".text.handler_address",
-        template_symbol = "_lc_vector_handler",
-        vector_prefix = "_vector_",
-        __CM7_0_VECTOR_TABLE_COPY_ATTRIBUTE
-        fill = loop,
-        no_inline
-    )
-    {
-        vector ( id =   0, fill = "_lc_ub_stack" );
-        vector ( id =   1, fill = "Reset_Handler" );
-        vector ( id =   2, optional, fill = "NMI_Handler" );
-        vector ( id =   3, optional, fill = "HardFault_Handler" );
-        vector ( id =   4, optional, fill = "MemManage_Handler" );
-        vector ( id =   5, optional, fill = "BusFault_Handler" );
-        vector ( id =   6, optional, fill = "UsageFault_Handler" );
-        vector ( id =  11, optional, fill = "SVC_Handler" );
-        vector ( id =  12, optional, fill = "DebugMon_Handler" );
-        vector ( id =  14, optional, fill = "PendSV_Handler" );
-        vector ( id =  15, optional, fill = "SysTick_Handler" );
-        // Add device-specific interrupt vectors here
-    }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -227,9 +164,6 @@ section_layout :cm7_0:linear
     "__FLS_AC_WRITE_FUNC_PTR_IN_RAM"       = __FLS_RSV_RAM_START;
     "__FLS_AC_BLANKREAD_FUNC_PTR_IN_RAM"   = __FLS_RSV_RAM_START;
 
-    // VTOR initialization value
-    "_lc_vtor_value" = __CM7_0_VECTOR_TABLE_RUN_ADDR;
-
     // Exported symbols for application use
     "__ROM_CODE_START"         = __FLASH_C0_START;
     "__RAM_SHAREABLE_START"    = __SRAM_SHAREABLE_START;
@@ -237,27 +171,18 @@ section_layout :cm7_0:linear
     "__RAM_NO_CACHEABLE_START" = __SRAM_NO_CACHEABLE_START;
     "LINKER_ID"                = 0;
 
-    // Vector table in ROM or ITCM
-#ifdef __CM7_0_VECTOR_TABLE_RAM_COPY
-    group ( contiguous, ordered, load_addr = __CM7_0_VECTOR_TABLE_ROM_ADDR )
-    {
-        select "_vector_0";
-        select "_vector_1";
-    }
-#endif
-
     // ==================== FLASH Region ====================
-    // Startup and initialization code (first in flash)
+    // Vector table initialization code (first in flash)
     group ( ordered, run_addr = __FLASH_C0_START )
+    {
+        select ".intvec_init";
+    }
+
+    // Startup and initialization code
+    group ( ordered )
     {
         select ".startup";
         select ".systeminit";
-    }
-
-    // Vector table initialization code
-    group ( ordered )
-    {
-        select ".intvec_init";
     }
 
     // Main code sections
@@ -334,7 +259,7 @@ section_layout :cm7_0:linear
     }
 
     // ==================== ITCM Region ====================
-    // Vector table in ITCM (copied from Flash at startup)
+    // Vector table in ITCM
     group ( ordered, run_addr = __ITCM_START )
     {
         select ".intvec";
