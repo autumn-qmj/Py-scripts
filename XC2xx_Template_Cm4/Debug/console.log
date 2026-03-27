@@ -1,0 +1,11 @@
+
+**** Clean-only build of configuration Debug for project XC2xx_Template_Cm4 ****
+
+"C:\\Program Files\\TASKING\\Arm v7.1r1\\carm\\bin\\amk" -j12 clean 
+Cleaning
+
+Time consumed: 212 ms
+**** End of build ****
+
+Tool info: 
+TASKING VX-toolset for Arm v7.1r1 - program builder Build 24082661
