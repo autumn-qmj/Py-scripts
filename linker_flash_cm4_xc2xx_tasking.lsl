@@ -109,10 +109,9 @@ section_setup :cm4:linear
         min_size = __CM4_HEAP
     );
 
-    // Start address
+    // Start address (Reset_Handler is in vector table at flash start)
     start_address
     (
-        run_addr = __FLASH_START | 1,  // Thumb mode
         symbol = "Reset_Handler"
     );
 
