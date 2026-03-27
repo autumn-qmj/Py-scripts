@@ -20,7 +20,7 @@
     .syntax unified
     .arch armv7-m
 
-.section ".init_table", "a"
+.section .init_table : CONST : ROOT (2)
   .long __VECTORTABLE_START
   .long 0  /* __INIT_VECTORTABLE_START - vector table in ITCM ROM */
   .long 0  /* __INIT_VECTORTABLE_END - vector table in ITCM ROM */
@@ -39,7 +39,7 @@
   .long __DATA_SHAREABLE_START
   .long __INIT_DATA_SHAREABLE_START
   .long __INIT_DATA_SHAREABLE_END
-.section ".zero_table", "a"
+.section .zero_table : CONST : ROOT (2)
   .long __BSS_START
   .long __BSS_END
   .long __BSS_NOCACHE_START
@@ -50,7 +50,7 @@
   .long __BSS_MCALBSSFAST_END
 
 ;/* Section vector table */
-.section ".intvec","ax"
+.section .intvec : CODE : ROOT (2)
 .align 2
 .thumb
 .globl __STACK_DTCM_START
@@ -337,7 +337,7 @@ VTABLE:
 /* be supported in all MCU.
 /***********************************************************************************************************************/
 
-.section ".startup","ax"
+.section .startup : CODE : ROOT (2)
 .thumb
 .set VTOR_REG, 0xE000ED08
 .set COREID_REG, 0x4001FC00

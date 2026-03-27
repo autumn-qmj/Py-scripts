@@ -156,7 +156,7 @@ section_layout :cm4:linear
     group ( ordered, run_addr = __FLASH_START )
     {
         select ".intvec";
-        select "VTABLE";
+        select ".intvec_init";
     }
 
     // Startup and initialization code

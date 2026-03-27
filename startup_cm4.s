@@ -20,7 +20,7 @@
     .syntax unified
     .arch armv7-m
 
-.section ".init_table", "a"
+.section .init_table : CONST : ROOT (2)
   .long __VECTORTABLE_START
   .long 0  /* __INIT_VECTORTABLE_START - not used for ROM vector table */
   .long 0  /* __INIT_VECTORTABLE_END - not used for ROM vector table */
@@ -28,13 +28,13 @@
   .long __INIT_DATA_START
   .long __INIT_DATA_END
 
-.section ".zero_table", "a"
+.section .zero_table : CONST : ROOT (2)
   .long __BSS_START
   .long __BSS_END
   
 ;/* Section vector table */
 
-.section ".intvec","ax"
+.section .intvec : CODE : ROOT (2)
 .align 2
 .thumb
 .globl __STACK_START
@@ -145,7 +145,7 @@ VTABLE:
 /* be supported in all MCU.
 /***********************************************************************************************************************/
 
-.section ".startup","ax"
+.section .startup : CODE : ROOT (2)
 .thumb
 .set VTOR_REG, 0xE000ED08
 

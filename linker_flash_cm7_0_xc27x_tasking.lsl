@@ -171,12 +171,12 @@ section_layout :cm7_0:linear
     "__RAM_NO_CACHEABLE_START" = __SRAM_NO_CACHEABLE_START;
     "LINKER_ID"                = 0;
 
-    // ==================== FLASH Region ====================
+    // ==================== ITCM Region ====================
     // Vector table (must be first in ITCM, used by startup_cm7.s)
     group ( ordered, run_addr = __ITCM_START )
     {
         select ".intvec";
-        select "VTABLE";
+        select ".intvec_init";
     }
 
     // Startup and initialization code
