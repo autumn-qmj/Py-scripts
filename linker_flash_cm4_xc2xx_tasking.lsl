@@ -5,7 +5,7 @@
 //  Description :  LSL file for the Infineon XC2xx device (Cortex-M4)
 //                 Converted from IAR ICF to TASKING LSL
 //
-//  This version works with custom startup_cm4.s
+//  This version uses TASKING vector_table generation
 //
 //  Memory Layout:
 //  -------------
@@ -182,7 +182,8 @@ section_layout :cm4:linear
     // Exported symbols for application use
     "__ROM_CODE_START"     = __FLASH_START;
     "__RAM_STACK_START"    = __SRAM_STACK_START;
-    "__VECTORTABLE_START"  = addressof(group:__vector_table);
+    "__VECTORTABLE_START"  = "__lc_ub_vector_table";
+    "__Vectors"            = "__lc_ub_vector_table";
     "LINKER_ID"            = 0;
 
     // ==================== FLASH Region ====================
