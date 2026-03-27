@@ -5,15 +5,15 @@
 //  Description :  LSL file for the Infineon XC2xx device (Cortex-M4)
 //                 Converted from IAR ICF to TASKING LSL
 //
-//  This version does NOT generate startup code - use with your own startup_cm4.s
+//  This version works with custom startup_cm4.s
 //
 //  Memory Layout:
 //  -------------
-//  INT           : 0x20000000 - 0x200001FF    512 B  (Interrupt Vector Table)
+//  INT           : 0x20000000 - 0x200001FF    512 B  (Interrupt Vector Table RAM)
 //  FLASH         : 0x00000000 - 0x0007FAFF  511 KB  (Flash)
 //  FLS_RSV_FLASH : 0x0007FB00 - 0x0007FFFF    1 KB  (Flash reserved for AC FLS)
 //  SRAM          : 0x20000200 - 0x2001DAFF  118.5 KB (SRAM)
-//  SRAM_STACK    : 0x2001DB00 - 0x2001FB00    8 KB  (Stack)
+//  SRAM_STACK    : 0x2001DB00 - 0x2001FAFF    8 KB  (Stack)
 //  FLS_RSV_RAM   : 0x2001FB00 - 0x2001FFFF    1 KB  (RAM reserved for AC FLS)
 //
 ////////////////////////////////////////////////////////////////////////////
@@ -129,11 +129,11 @@ section_layout :cm4:linear
         select "stack";
     }
 
-    // Exported symbols for stack
+    // Exported symbols for stack (used by startup_cm4.s)
     "__STACK_END"   = __SRAM_STACK_START;
     "__STACK_START" = __SRAM_STACK_END;
 
-    // Exported symbols for RAM initialization
+    // Exported symbols for RAM initialization (used by startup_cm4.s)
     "__INIT_SRAM_START" = __SRAM_REGION_START;
     "__INIT_SRAM_END"   = __SRAM_REGION_END;
 
@@ -152,12 +152,11 @@ section_layout :cm4:linear
     "LINKER_ID"        = 0;
 
     // ==================== FLASH Region ====================
-    // Vector table (must be first, at flash start)
+    // Vector table (must be first, at flash start) - used by startup_cm4.s
     group ( ordered, run_addr = __FLASH_START )
     {
-        select ".intvec_init";
         select ".intvec";
-        select "__Vectors";
+        select "VTABLE";
     }
 
     // Startup and initialization code
@@ -165,6 +164,13 @@ section_layout :cm4:linear
     {
         select ".startup";
         select ".systeminit";
+    }
+
+    // Init table and zero table (used by startup_cm4.s for data initialization)
+    group ( ordered )
+    {
+        select ".init_table";
+        select ".zero_table";
     }
 
     // Main code sections
@@ -175,8 +181,6 @@ section_layout :cm4:linear
         select ".rodata";
         select ".mcal_const_cfg.*";
         select ".mcal_const.*";
-        select ".init_table";
-        select ".zero_table";
     }
 
     // Data initialization images (in ROM, copied to RAM at startup)
@@ -203,7 +207,7 @@ section_layout :cm4:linear
     // Zero-initialized data (BSS) in SRAM
     group ( ordered )
     {
-        select ".bss" (attributes = -n);
+        select ".bss";
         select ".mcal_bss.*";
     }
 
@@ -211,7 +215,7 @@ section_layout :cm4:linear
     // Vector table in INT RAM (if copied from Flash)
     group ( ordered, run_addr = __INT_START )
     {
-        select ".intvec";
+        select ".intvec_ram";
     }
 }
 

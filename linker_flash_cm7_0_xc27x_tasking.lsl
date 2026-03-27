@@ -5,13 +5,13 @@
 //  Description :  LSL file for the Infineon XC27x device (Core 0)
 //                 Converted from IAR ICF to TASKING LSL
 //
-//  This version does NOT generate startup code - use with your own startup_cm7.s
+//  This version works with custom startup_cm7.s
 //
 //  Memory Layout:
 //  -------------
 //  ITCM          : 0x00000000 - 0x00007FFF   32 KB  (Instruction TCM)
 //  DTCM          : 0x20000000 - 0x2000EFFF   60 KB  (Data TCM)
-//  DTCM_STACK    : 0x2000F000 - 0x20010000    4 KB  (Stack in DTCM)
+//  DTCM_STACK    : 0x2000F000 - 0x2000FFFF    4 KB  (Stack in DTCM)
 //  FLASH_C0      : 0x10000000 - 0x101FF7FF 2046 KB  (Core 0 Flash)
 //  FLS_RSV_FLASH : 0x101FF800 - 0x101FFFFF    2 KB  (Flash reserved for AC FLS)
 //  SRAM_C0       : 0x30000000 - 0x3003F7FF  254 KB  (Core 0 SRAM)
@@ -140,11 +140,11 @@ section_layout :cm7_0:linear
         select "stack";
     }
 
-    // Exported symbols for stack
+    // Exported symbols for stack (used by startup_cm7.s)
     "__STACK_DTCM_END"   = __DTCM_STACK_START;
     "__STACK_DTCM_START" = __DTCM_STACK_END;
 
-    // Exported symbols for RAM initialization
+    // Exported symbols for RAM initialization (used by startup_cm7.s)
     "__RAM_INIT"         = 1;
     "__INIT_SRAM_START"  = __SRAM_C0_START;
     "__INIT_SRAM_END"    = __SRAM_SHAREABLE_END;
@@ -172,10 +172,11 @@ section_layout :cm7_0:linear
     "LINKER_ID"                = 0;
 
     // ==================== FLASH Region ====================
-    // Vector table initialization code (first in flash)
-    group ( ordered, run_addr = __FLASH_C0_START )
+    // Vector table (must be first in ITCM, used by startup_cm7.s)
+    group ( ordered, run_addr = __ITCM_START )
     {
-        select ".intvec_init";
+        select ".intvec";
+        select "VTABLE";
     }
 
     // Startup and initialization code
@@ -183,6 +184,13 @@ section_layout :cm7_0:linear
     {
         select ".startup";
         select ".systeminit";
+    }
+
+    // Init table and zero table (used by startup_cm7.s for data initialization)
+    group ( ordered )
+    {
+        select ".init_table";
+        select ".zero_table";
     }
 
     // Main code sections
@@ -195,8 +203,6 @@ section_layout :cm7_0:linear
         select ".rodata";
         select ".mcal_const_cfg.*";
         select ".mcal_const.*";
-        select ".init_table";
-        select ".zero_table";
     }
 
     // Data initialization images (in ROM, copied to RAM at startup)
@@ -259,12 +265,6 @@ section_layout :cm7_0:linear
     }
 
     // ==================== ITCM Region ====================
-    // Vector table in ITCM
-    group ( ordered, run_addr = __ITCM_START )
-    {
-        select ".intvec";
-    }
-
     // Fast code in ITCM
     group ( ordered )
     {
