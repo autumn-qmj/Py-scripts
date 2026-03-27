@@ -109,12 +109,45 @@ section_setup :cm4:linear
         min_size = __CM4_HEAP
     );
 
+    // Start address
+    start_address
+    (
+        run_addr = __FLASH_START | 1,  // Thumb mode
+        symbol = "Reset_Handler"
+    );
+
     // Copy table for data initialization
     copytable
     (
         align = 8,
         dest = linear
     );
+
+    // Vector table definition
+    vector_table "__vector_table"
+    (
+        vector_size = 4,
+        size = 256,
+        run_addr = __FLASH_START,
+        template = ".text.handler_address",
+        template_symbol = "_lc_vector_handler",
+        vector_prefix = "_vector_",
+        fill = loop,
+        no_inline
+    )
+    {
+        vector ( id =   0, fill = "_lc_e_stack" );
+        vector ( id =   1, fill = "Reset_Handler" );
+        vector ( id =   2, optional, fill = "NMI_Handler" );
+        vector ( id =   3, optional, fill = "HardFault_Handler" );
+        vector ( id =   4, optional, fill = "MemManage_Handler" );
+        vector ( id =   5, optional, fill = "BusFault_Handler" );
+        vector ( id =   6, optional, fill = "UsageFault_Handler" );
+        vector ( id =  11, optional, fill = "SVC_Handler" );
+        vector ( id =  12, optional, fill = "DebugMon_Handler" );
+        vector ( id =  14, optional, fill = "PendSV_Handler" );
+        vector ( id =  15, optional, fill = "SysTick_Handler" );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -147,18 +180,12 @@ section_layout :cm4:linear
     "__FLS_AC_BLANKREAD_FUNC_PTR_IN_RAM"   = __FLS_RSV_RAM_START;
 
     // Exported symbols for application use
-    "__ROM_CODE_START" = __FLASH_START;
-    "__RAM_STACK_START" = __SRAM_STACK_START;
-    "LINKER_ID"        = 0;
+    "__ROM_CODE_START"     = __FLASH_START;
+    "__RAM_STACK_START"    = __SRAM_STACK_START;
+    "__VECTORTABLE_START"  = addressof(group:__vector_table);
+    "LINKER_ID"            = 0;
 
     // ==================== FLASH Region ====================
-    // Vector table (must be first, at flash start) - used by startup_cm4.s
-    group ( ordered, run_addr = __FLASH_START )
-    {
-        select ".intvec";
-        select ".intvec_init";
-    }
-
     // Startup and initialization code
     group ( ordered )
     {

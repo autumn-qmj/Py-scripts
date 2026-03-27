@@ -31,117 +31,16 @@
 .section .zero_table : CONST : ROOT (2)
   .long __BSS_START
   .long __BSS_END
-  
-;/* Section vector table */
 
-.section .intvec : CODE : ROOT (2)
-.align 2
-.thumb
-.globl __STACK_START
-.type Reset_Handler, %function
-.globl Reset_Handler
-.globl VTABLE
-.globl NMI_Handler
-.globl HardFault_Handler
-.globl MemManage_Handler
-.globl BusFault_Handler
-.globl UsageFault_Handler
-.globl UnKnown_Handler
-.globl SVC_Handler
-.globl DebugMon_Handler
-.globl PendSV_Handler
-.globl SysTick_Handler
-
-VTABLE:
-.long __STACK_START
-.long Reset_Handler
-.long NMI_Handler
-.long HardFault_Handler
-.long MemManage_Handler
-.long BusFault_Handler
-.long UsageFault_Handler
-.long 0
-.long 0
-.long 0
-.long 0
-.long SVC_Handler
-.long DebugMon_Handler
-.long 0
-.long PendSV_Handler
-.long SysTick_Handler
-    ;/* Interrupts */
-
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-.long UnKnown_Handler
-
-.size VTABLE, . - VTABLE
+;/* Vector table is now defined in LSL file */
 
 /***********************************************************************************************************************
-/* Before the MCU driver can be initialized, a basic initialization of the MCU has to be executed. This MCU specific 
-/* initialization is typically executed in a start-up code.The start-up code of the MCU shall be executed after power up 
+/* Before the MCU driver can be initialized, a basic initialization of the MCU has to be executed. This MCU specific
+/* initialization is typically executed in a start-up code.The start-up code of the MCU shall be executed after power up
 /* and any kind of microcontroller reset. It shall perform very basic and microcontroller specific start-up initialization
 /* and shall be kept short because the MCU clock and PLL are not yet initialized. The start-up code shall cover MCU specific
-/* initialization which is not part of other MCU services or other MCAL drivers. The following description summarizes the  
-/* basic functionality to be included in the start-up code. It is listed for guidance because some functionality might not 
+/* initialization which is not part of other MCU services or other MCAL drivers. The following description summarizes the
+/* basic functionality to be included in the start-up code. It is listed for guidance because some functionality might not
 /* be supported in all MCU.
 /***********************************************************************************************************************/
 
@@ -149,7 +48,7 @@ VTABLE:
 .thumb
 .set VTOR_REG, 0xE000ED08
 
-.thumb 
+.thumb
 
 .thumb_func
 .globl Reset_Handler
@@ -261,7 +160,7 @@ SetRegionData:
     CMP     R4, #0
     BEQ     SetRegionData
 ; /***********************************************************************************************************************
-; /* Copy data from rom to Dtcm/Itcm in core1 
+; /* Copy data from rom to Dtcm/Itcm in core1
 ; /* for one image project including 2 cores
 ; /**********************************************************************************************************************/
 CopyDataRomtoRam:
