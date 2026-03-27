@@ -20,11 +20,11 @@
 // Memory region sizes
 //
 #define __INT_SIZE               512
-#define __FLASH_SIZE             511k
-#define __FLS_RSV_FLASH_SIZE     1k
-#define __SRAM_SIZE              118k
-#define __SRAM_STACK_SIZE        8k
-#define __FLS_RSV_RAM_SIZE       1k
+#define __FLASH_SIZE             0x7FB00           /* 512KB - 1KB = 511KB usable */
+#define __FLS_RSV_FLASH_SIZE     0x400             /* 1KB */
+#define __SRAM_SIZE              0x1D900           /* 118.5KB */
+#define __SRAM_STACK_SIZE        0x2000            /* 8KB */
+#define __FLS_RSV_RAM_SIZE       0x400             /* 1KB */
 
 //
 // Memory region addresses
