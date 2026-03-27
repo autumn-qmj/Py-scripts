@@ -31,6 +31,7 @@
 								<inputType id="com.tasking.arm.cc.msInputType.1183640103" name="MS" superClass="com.tasking.arm.cc.msInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.as.abs.debug.136765559" name="Assembler" superClass="com.tasking.arm.as.abs.debug">
+								<option id="com.tasking.arm.as.fileExtensions.853791116" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
 								<inputType id="com.tasking.arm.asmInputType.853791116" name="ASM" superClass="com.tasking.arm.asmInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.lk.abs.debug.968817195" name="Linker" superClass="com.tasking.arm.lk.abs.debug">
@@ -75,6 +76,7 @@
 								<inputType id="com.tasking.arm.cc.msInputType.463565465" name="MS" superClass="com.tasking.arm.cc.msInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.as.abs.release.97462453" name="Assembler" superClass="com.tasking.arm.as.abs.release">
+								<option id="com.tasking.arm.as.fileExtensions.956768268" name="File Extensions" superClass="com.tasking.arm.as.fileExtensions" value="s;S;asm" valueType="string"/>
 								<inputType id="com.tasking.arm.asmInputType.956768268" name="ASM" superClass="com.tasking.arm.asmInputType"/>
 							</tool>
 							<tool id="com.tasking.arm.lk.abs.release.857585314" name="Linker" superClass="com.tasking.arm.lk.abs.release">
